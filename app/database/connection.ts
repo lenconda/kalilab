@@ -1,12 +1,6 @@
 import mongoose, { Mongoose } from 'mongoose'
 import { IMongoConfig } from '../../interfaces/config'
 import getLogger from '../utils/logger'
-import config from '../../config'
-const { DB_HOST,
-  DB_NAME,
-  DB_PASSWORD,
-  DB_USER,
-  DB_PORT } = config
 
 const logger = getLogger(__filename)
 
