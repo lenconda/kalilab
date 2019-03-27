@@ -3,9 +3,11 @@ import kcors from 'kcors'
 import Koa from 'koa'
 import bodyParser from 'koa-bodyparser'
 import logger from 'koa-logger'
-import { useKoaServer, useContainer } from 'routing-controllers'
+import { useKoaServer, useContainer, Action } from 'routing-controllers'
 import { Container } from 'typedi'
-import config from '../config'
+import { validateToken, getUserIDByToken } from './utils/authorization'
+import MongoDBConfig from '../config/mongodb'
+import MongoDBConnection from './database/connection'
 
 const app = new Koa()
 
@@ -24,15 +26,19 @@ app.use(kcors())
 
 app.use(bodyParser())
 
-if (config.isDev) app.use(logger())
+if (process.env.NODE_ENV.toLowerCase() === 'development') app.use(logger())
 
 let port: number = process.env.PORT ? parseInt(process.env.PORT) : 3000
+
+new MongoDBConnection(MongoDBConfig).connect()
 
 useContainer(Container)
 useKoaServer(app, {
   routePrefix: '/api',
   controllers: [__dirname + '/controllers/*.{ts,js}'],
   middlewares: [__dirname + '/middlewares/*.{ts,js}'],
+  authorizationChecker: async (action: Action) => validateToken(action.request.headers['authorization']),
+  currentUserChecker: async (action: Action) => getUserIDByToken(action.request.headers['authorization']),
   defaults: {
     paramOptions: { required: true }
   },

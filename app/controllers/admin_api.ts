@@ -8,9 +8,9 @@ export default class APIController {
   @Inject()
   service: AdminAPIService
 
-  @Post('login')
-  async info (@BodyParam('optr1') optr1: number, @BodyParam('optr2') optr2: number) {
-    const result = await this.service.getArithmeticResult(optr1, optr2)
+  @Post('/login')
+  async login (@BodyParam('username') username: string, @BodyParam('password') password: string) {
+    const result = await this.service.adminLogin(username, password)
     return result
   }
 

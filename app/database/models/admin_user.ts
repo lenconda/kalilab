@@ -9,7 +9,7 @@ export interface AdminUser {
 interface IAdminUserMongo extends AdminUser, mongoose.Document {}
 
 const adminUserSchema = new mongoose.Schema({
-  username: String,
+  username: { type: String, unique: true, index: true },
   password: String,
   updateDate: String
 })
