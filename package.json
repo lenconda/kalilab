@@ -22,10 +22,11 @@
     "@types/koa-bodyparser": "^4.2.0",
     "@types/koa-logger": "^3.1.0",
     "@types/koa-router": "^7.0.27",
-    "@types/mongoose": "^5.3.24",
-    "@types/node": "^9.4.0",
     "@types/lodash": "^4.14.120",
     "@types/log4js": "^2.3.5",
+    "@types/md5": "^2.1.33",
+    "@types/mongoose": "^5.3.24",
+    "@types/node": "^9.4.0",
     "@types/tcp-ping": "^0.1.0",
     "@types/uuid": "^3.4.4",
     "ndb": "^1.0.33",
@@ -39,13 +40,14 @@
     "koa-custom-response": "^0.2.2",
     "koa-logger": "^3.1.0",
     "koa-router": "^7.4.0",
-    "mongoose": "^5.4.20",
     "lodash": "^4.17.11",
     "log4js": "^3.0.6",
-    "tcp-ping": "^0.1.1",
-    "uuid": "^3.3.2",
+    "md5": "^2.2.1",
+    "mongoose": "^5.4.20",
     "reflect-metadata": "^0.1.12",
     "routing-controllers": "^0.7.7",
-    "typedi": "^0.7.2"
+    "tcp-ping": "^0.1.1",
+    "typedi": "^0.7.2",
+    "uuid": "^3.3.2"
   }
 }
