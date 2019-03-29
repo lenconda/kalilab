@@ -1,5 +1,5 @@
 import { JsonController, Get, Post, QueryParam, BodyParam } from 'routing-controllers'
-import APIService from '../services/api'
+import APIService from '../services/app_api'
 import { Inject } from 'typedi'
 
 @JsonController('/')

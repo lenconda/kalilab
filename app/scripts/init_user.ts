@@ -11,7 +11,6 @@ export default async function initUser (config: IMongoConfig, username: string, 
     username,
     password: MD5(password),
     updateDate: Date.parse(new Date().toString()).toString() }])
-  console.log(results)
   mongoDBConnection.disconnect()
 }
 
