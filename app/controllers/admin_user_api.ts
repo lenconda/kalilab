@@ -2,17 +2,18 @@ import {
   JsonController,
   Get,
   Post,
+  Put,
   Authorized,
   CurrentUser,
   BodyParam } from 'routing-controllers'
-import AdminAPIService from '../services/admin_user_api'
+import AdminUserService from '../services/admin_user_api'
 import { Inject } from 'typedi'
 
 @JsonController('/admin/user')
-export default class AdminAPIController {
+export default class AdminUserController {
 
   @Inject()
-  service: AdminAPIService
+  service: AdminUserService
 
   @Post('/login')
   async login (
@@ -29,7 +30,7 @@ export default class AdminAPIController {
     return result
   }
 
-  @Post('/update')
+  @Put('/update')
   @Authorized()
   async updateUserProfile (
     @CurrentUser() userID: string,

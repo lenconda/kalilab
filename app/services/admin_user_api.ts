@@ -25,7 +25,7 @@ interface IUserProfile {
 }
 
 @Service()
-export default class AdminAPIService {
+export default class AdminUserService {
 
   /**
    * get user token
