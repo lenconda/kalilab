@@ -2,7 +2,8 @@ import {
   JsonController,
   Get,
   Post,
-  BodyParam } from 'routing-controllers'
+  BodyParam,
+  Authorized } from 'routing-controllers'
 import AdminManageService, {
   IAddApplicationResponse } from '../services/admin_manage_api'
 import { IApplication } from '../../interfaces/admin_manage'
@@ -15,6 +16,7 @@ export default class AdminManageController {
   service: AdminManageService
 
   @Post('/application')
+  @Authorized()
   async addApplication (
     @BodyParam('binaryPath') binaryPath: string,
     @BodyParam('name') name: string,
@@ -27,6 +29,7 @@ export default class AdminManageController {
   }
 
   @Get('/application')
+  @Authorized()
   async getAllApplications (): Promise<IApplication[] | string> {
     let results = await this.service.getAllApplications()
     return results
