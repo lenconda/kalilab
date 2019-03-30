@@ -3,12 +3,12 @@ import jwt from 'jsonwebtoken'
 import md5 from 'md5'
 import { AdminUserModel } from '../database/models/admin_user'
 
-interface IAdminLoginResult {
+export interface IAdminLoginResult {
   ok: boolean
   token?: string
 }
 
-interface IUpdateProfileResult {
+export interface IUpdateProfileResult {
   ok: boolean
   message: string
 }
@@ -18,7 +18,7 @@ interface INewUserProfile {
   password: string
 }
 
-interface IUserProfile {
+export interface IUserProfile {
   id: string
   username: string
   updatedAt: string
