@@ -3,10 +3,14 @@ import {
   Get,
   Post,
   BodyParam,
-  Authorized } from 'routing-controllers'
+  Authorized,
+  Put,
+  Param } from 'routing-controllers'
 import AdminManageService, {
-  IAddApplicationResponse } from '../services/admin_manage_api'
-import { IApplication } from '../../interfaces/admin_manage'
+  IApplicationResponse, } from '../services/admin_manage_api'
+import {
+  IApplication,
+  IApplicationUpdateRequest } from '../../interfaces/admin_manage'
 import { Inject } from 'typedi'
 
 @JsonController('/admin/manage')
@@ -21,7 +25,7 @@ export default class AdminManageController {
     @BodyParam('binaryPath') binaryPath: string,
     @BodyParam('name') name: string,
     @BodyParam('avatar') avatar: string,
-    @BodyParam('version') version: string): Promise<IAddApplicationResponse> {
+    @BodyParam('version') version: string): Promise<IApplicationResponse> {
     let result = this.service.addApplication({
       binaryPath, name, version, avatar
     })
@@ -33,6 +37,15 @@ export default class AdminManageController {
   async getAllApplications (): Promise<IApplication[] | string> {
     let results = await this.service.getAllApplications()
     return results
+  }
+
+  @Put('/application/:id')
+  @Authorized()
+  async modifyApplicationInformation (
+    @Param('id') uuid: string,
+    @BodyParam('updates') updates: IApplicationUpdateRequest ) {
+    let result = await this.service.modifyApplicationInformation(updates, uuid)
+    return result
   }
 
 }

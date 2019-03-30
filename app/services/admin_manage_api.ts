@@ -3,11 +3,12 @@ import uuidv3 from 'uuid/v3'
 import { AdminManageModel } from '../database/models/admin_manage'
 import {
   IApplicationRequest,
-  IApplication } from '../../interfaces/admin_manage'
+  IApplication,
+  IApplicationUpdateRequest } from '../../interfaces/admin_manage'
 
 const NAMESPACE = 'b4e19c21-f97f-489f-9aa7-37e108a50c6f'
 
-export interface IAddApplicationResponse {
+export interface IApplicationResponse {
   ok: boolean
   message: string
 }
@@ -20,10 +21,10 @@ export default class AdminManageService {
    * @param {IApplication} applicationInformation
    * @public
    * @async
-   * @return {IAddApplicationResponse}
+   * @return {IApplicationResponse}
    */
   public async addApplication (
-    applicationInformation: IApplicationRequest): Promise<IAddApplicationResponse> {
+    applicationInformation: IApplicationRequest): Promise<IApplicationResponse> {
     let { binaryPath, avatar, name, version } = applicationInformation
     let uuid = uuidv3(`${binaryPath}:${version}`, NAMESPACE)
     let updated = Date.parse(new Date().toString()).toString()
@@ -61,6 +62,34 @@ export default class AdminManageService {
       return results
     } catch (e) {
       return e.toString()
+    }
+  }
+
+  /**
+   * update application information
+   * @param {IApplicationUpdateRequest} updatedInformation
+   * @param {string} uuid
+   * @public
+   * @async
+   * @return {IApplicationResponse}
+   */
+  public async modifyApplicationInformation (
+    updatedInformation: IApplicationUpdateRequest,
+    uuid: string): Promise<IApplicationResponse> {
+    try {
+      await AdminManageModel.updateOne({ uuid }, {
+        ...updatedInformation,
+        updated: Date.parse(new Date().toString()).toString()
+      })
+      return {
+        ok: true,
+        message: `Updated application ${uuid}`
+      }
+    } catch (e) {
+      return {
+        ok: false,
+        message: e.toString()
+      }
     }
   }
 
