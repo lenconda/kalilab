@@ -5,7 +5,9 @@ import {
   BodyParam,
   Authorized,
   Put,
-  Param } from 'routing-controllers'
+  Param,
+  Delete
+} from 'routing-controllers'
 import AdminManageService, {
   IApplicationResponse, } from '../services/admin_manage_api'
 import {
@@ -43,8 +45,16 @@ export default class AdminManageController {
   @Authorized()
   async modifyApplicationInformation (
     @Param('id') uuid: string,
-    @BodyParam('updates') updates: IApplicationUpdateRequest ) {
+    @BodyParam('updates') updates: IApplicationUpdateRequest ): Promise<IApplicationResponse> {
     let result = await this.service.modifyApplicationInformation(updates, uuid)
+    return result
+  }
+
+  @Delete('/application/:id')
+  @Authorized()
+  async deleteApplication (
+    @Param('id') uuid: string): Promise<IApplicationResponse> {
+    let result = await this.service.deleteApplication(uuid)
     return result
   }
 

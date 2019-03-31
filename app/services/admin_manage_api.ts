@@ -93,4 +93,26 @@ export default class AdminManageService {
     }
   }
 
+  /**
+   * delete an application
+   * @param {string} uuid
+   * @public
+   * @async
+   * @return {IApplicationResponse}
+   */
+  public async deleteApplication (uuid: string): Promise<IApplicationResponse> {
+    try {
+      await AdminManageModel.deleteOne({ uuid })
+      return {
+        ok: true,
+        message: `Deleted application ${uuid}`
+      }
+    } catch (e) {
+      return {
+        ok: false,
+        message: e.toString()
+      }
+    }
+  }
+
 }
