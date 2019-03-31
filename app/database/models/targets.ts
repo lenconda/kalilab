@@ -9,7 +9,7 @@ const targetSchema = new mongoose.Schema<ITargetItem>({
   address: String,
   port: String,
   protocol: String,
-  scans: String
+  scans: [String]
 })
 
 export const TargetModel = mongoose.model<ITargetsMongo>('ts_targets', targetSchema)
