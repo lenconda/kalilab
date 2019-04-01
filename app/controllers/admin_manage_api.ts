@@ -27,9 +27,10 @@ export default class AdminManageController {
     @BodyParam('binaryPath') binaryPath: string,
     @BodyParam('name') name: string,
     @BodyParam('avatar') avatar: string,
-    @BodyParam('version') version: string): Promise<IApplicationResponse> {
+    @BodyParam('version') version: string,
+    @BodyParam('brief') brief: string): Promise<IApplicationResponse> {
     let result = this.service.addApplication({
-      binaryPath, name, version, avatar
+      binaryPath, name, version, avatar, brief
     })
     return result
   }

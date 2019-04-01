@@ -30,13 +30,13 @@ export default class AdminManageService {
    */
   public async addApplication (
     applicationInformation: IApplicationRequest): Promise<IApplicationResponse> {
-    let { binaryPath, avatar, name, version } = applicationInformation
+    let { binaryPath, avatar, name, version, brief } = applicationInformation
     let uuid = uuidv3(`${binaryPath}:${version}`, UUID_NAMESPACE)
     let updated = Date.parse(new Date().toString()).toString()
     try {
       let result = await AdminManageModel.insertMany(<IApplication[]>[{
         binaryPath, avatar, name, version,
-        uuid, updated
+        uuid, updated, brief, category: []
       }])
       return {
         ok: true,
@@ -60,9 +60,9 @@ export default class AdminManageService {
     try {
       let resultsRaw = await AdminManageModel.find({})
       let results = resultsRaw.map((value, index): IApplication => {
-        let { binaryPath, name, avatar, version, updated, uuid } = value
+        let { binaryPath, name, avatar, version, updated, uuid, category, brief } = value
         return {
-          binaryPath, uuid, updated, version, avatar, name }
+          binaryPath, uuid, updated, version, avatar, name, category, brief }
       })
       return results
     } catch (e) {

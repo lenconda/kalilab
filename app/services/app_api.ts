@@ -4,9 +4,7 @@ import {
   IReportItem,
   IReportItemResponse } from '../../interfaces/reports'
 import { IApplication } from '../../interfaces/admin_manage'
-import {
-  ICategory,
-  ICategoryResponse } from '../../interfaces/category'
+import { ICategoryResponse } from '../../interfaces/category'
 import {
   ReportsModel,
   AdminManageModel,
@@ -111,9 +109,9 @@ export default class AppService {
         .skip(limit * (page - 1))
         .limit(limit)
       let results = resultsRaw.map((value, index): IApplication => {
-        let { binaryPath, name, avatar, version, updated, uuid } = value
+        let { binaryPath, name, avatar, version, updated, uuid, brief, category } = value
         return {
-          binaryPath, uuid, updated, version, avatar, name }
+          binaryPath, uuid, updated, version, avatar, name, brief, category }
       })
       let nextResults = await AdminManageModel.find({})
         .skip(limit * page)
