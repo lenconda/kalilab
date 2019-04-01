@@ -3,6 +3,7 @@ import { exec } from 'child_process'
 import {
   IReportItem,
   IReportItemResponse } from '../../interfaces/reports'
+import { IApplication } from '../../interfaces/admin_manage'
 import {
   ReportsModel,
   AdminManageModel } from '../database/models'
@@ -71,6 +72,19 @@ export default class AppService {
         ...response, views: 0, downloads: 0 }])
       return response
     }
+  }
+
+  /**
+   * return information of the specific application
+   * @param {string} uuid
+   * @public
+   * @async
+   * @return {Promise<IApplication>}
+   */
+  public async getApplicationInformation (
+    uuid: string): Promise<IApplication> {
+    let result = await AdminManageModel.findOne({ uuid })
+    return result
   }
 
 }

@@ -3,10 +3,12 @@ import {
   Ctx,
   Post,
   Param,
-  BodyParam } from 'routing-controllers'
+  BodyParam,
+  Get } from 'routing-controllers'
 import AppService from '../services/app_api'
 import { Inject } from 'typedi'
 import { IReportItemResponse } from '../../interfaces/reports'
+import { IApplication } from '../../interfaces/admin_manage'
 import { Context } from 'koa'
 
 @JsonController('/')
@@ -22,6 +24,13 @@ export default class APIController {
     @BodyParam('command') command: string): Promise<IReportItemResponse> {
     let result =
       await this.service.runApplication(application, context.ip, command)
+    return result
+  }
+
+  @Get('application/:id')
+  async getApplicationInformation (
+    @Param('id') uuid: string): Promise<IApplication> {
+    let result = await this.service.getApplicationInformation(uuid)
     return result
   }
 
