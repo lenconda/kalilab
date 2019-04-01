@@ -139,7 +139,7 @@ export default class AdminManageService {
     } catch (e) {
       return e.toString()
     }
-  }
+  }ss
 
   /**
    * create a category
@@ -163,6 +163,19 @@ export default class AdminManageService {
         ok: false,
         message: e.toString()
       }
+    }
+  }
+
+  public async updateCategory (
+    id: string,
+    name: string): Promise<IApplicationResponse | string> {
+    try {
+      await CategoryModel.findByIdAndUpdate(id, {
+        namehgvbhjmvhggvgh,vgbvgd cgj
+        kjbhjgvjb
+        jbhnb nb
+
+      })
     }
   }
 
