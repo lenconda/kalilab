@@ -5,8 +5,8 @@ import {
   IApplicationRequest,
   IApplication,
   IApplicationUpdateRequest } from '../../interfaces/admin_manage'
-
-const NAMESPACE = 'b4e19c21-f97f-489f-9aa7-37e108a50c6f'
+import config from '../../config'
+const { UUID_NAMESPACE } = config
 
 export interface IApplicationResponse {
   ok: boolean
@@ -26,7 +26,7 @@ export default class AdminManageService {
   public async addApplication (
     applicationInformation: IApplicationRequest): Promise<IApplicationResponse> {
     let { binaryPath, avatar, name, version } = applicationInformation
-    let uuid = uuidv3(`${binaryPath}:${version}`, NAMESPACE)
+    let uuid = uuidv3(`${binaryPath}:${version}`, UUID_NAMESPACE)
     let updated = Date.parse(new Date().toString()).toString()
     try {
       let result = await AdminManageModel.insertMany(<IApplication[]>[{

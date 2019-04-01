@@ -1,5 +1,6 @@
 export interface IAppConfig {
   APP_LOG_DIR: string
+  UUID_NAMESPACE: string
 }
 
 export interface IMongoConfig {
