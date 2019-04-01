@@ -4,6 +4,8 @@
   "main": "index.js",
   "scripts": {
     "lint": "tslint -c tslint.json -p tsconfig.json",
+    "init": "ts-node app/scripts/init_user.ts",
+    "dev-init": "source /etc/zshrc; export NODE_ENV=development; ts-node app/scripts/init_user.ts",
     "start": "source /etc/zshrc; export NODE_ENV=development; ts-node app/app.ts",
     "serve": "pm2 start --interpreter node_modules/.bin/ts-node app/app.ts --name Intruders",
     "build": "npm run lint && tsc",
