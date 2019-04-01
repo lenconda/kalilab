@@ -2,7 +2,7 @@ import mongoose from 'mongoose'
 import { IApplication } from '../../interfaces/admin_manage'
 import { IAdminUser } from '../../interfaces/admin_user'
 import { IReportItem } from '../../interfaces/reports'
-import { ICategory } from '../../interfaces/category'
+import { ICategoryResponse } from '../../interfaces/category'
 
 // admin application schema
 interface IApplicationMongo extends IApplication, mongoose.Document {}
@@ -43,9 +43,9 @@ const reportsSchema = new mongoose.Schema<IReportItem>({
 })
 
 // category interface
-interface ICategoryMongo extends ICategory, mongoose.Document {}
+interface ICategoryMongo extends ICategoryResponse, mongoose.Document {}
 
-const categorySchema = new mongoose.Schema<ICategory>({
+const categorySchema = new mongoose.Schema<ICategoryResponse>({
   name: String
 })
 

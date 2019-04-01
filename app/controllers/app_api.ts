@@ -3,12 +3,14 @@ import {
   Ctx,
   Post,
   Param,
+  QueryParam,
   BodyParam,
   Get } from 'routing-controllers'
 import AppService from '../services/app_api'
 import { Inject } from 'typedi'
 import { IReportItemResponse } from '../../interfaces/reports'
 import { IApplication } from '../../interfaces/admin_manage'
+import { ICategoryResponse } from '../../interfaces/category'
 import { Context } from 'koa'
 
 @JsonController('/')
@@ -34,11 +36,20 @@ export default class APIController {
     return result
   }
 
-  @Get('applications/:limit/:page')
+  @Get('applications')
   async getAllApplications (
-    @Param('limit') limit: number,
-    @Param('page') page: number): Promise<IApplication[] | string> {
-    let result = await this.service.getAllApplications(limit, page)
+    @QueryParam('limit') limit: number,
+    @QueryParam('page') page: number,
+    @QueryParam('category') category: string): Promise<{ next: boolean, applications: IApplication[] } | string> {
+    let result = await this.service.getAllApplications(limit, page, category)
+    return result
+  }
+
+  @Get('categories')
+  async getAllCategories (
+    @QueryParam('limit') limit: number,
+    @QueryParam('page') page: number): Promise<{ next: boolean, categories: ICategoryResponse[] } | string> {
+    let result = await this.service.getAllCategories(limit, page)
     return result
   }
 

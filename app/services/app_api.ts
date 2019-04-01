@@ -5,8 +5,12 @@ import {
   IReportItemResponse } from '../../interfaces/reports'
 import { IApplication } from '../../interfaces/admin_manage'
 import {
+  ICategory,
+  ICategoryResponse } from '../../interfaces/category'
+import {
   ReportsModel,
-  AdminManageModel } from '../database/models'
+  AdminManageModel,
+  CategoryModel } from '../database/models'
 
 @Service()
 export default class AppService {
@@ -95,13 +99,15 @@ export default class AppService {
    * get all application lists
    * @public
    * @async
-   * @return {Promise<IApplication[] | string>}
+   * @return { { next: boolean, applications: IApplication[] } | string }
    */
   public async getAllApplications (
     limit: number,
-    page: number): Promise<IApplication[] | string> {
+    page: number,
+    category?: string): Promise<{ next: boolean, applications: IApplication[] } | string> {
+    let query = category ? { category } : {}
     try {
-      let resultsRaw = await AdminManageModel.find({})
+      let resultsRaw = await AdminManageModel.find(query)
         .skip(limit * (page - 1))
         .limit(limit)
       let results = resultsRaw.map((value, index): IApplication => {
@@ -109,7 +115,44 @@ export default class AppService {
         return {
           binaryPath, uuid, updated, version, avatar, name }
       })
-      return results
+      let nextResults = await AdminManageModel.find({})
+        .skip(limit * page)
+        .limit(limit)
+      return {
+        next: nextResults.length !== 0,
+        applications: results }
+    } catch (e) {
+      return e.toString()
+    }
+  }
+
+  /**
+   * get all categories
+   * @param {number} limit
+   * @param {number} page
+   * @public
+   * @async
+   * @return { Promise<{ next: boolean, categories: ICategoryResponse[] } | string>}
+   */
+  public async getAllCategories (
+    limit: number,
+    page: number): Promise<{ next: boolean, categories: ICategoryResponse[] } | string> {
+    try {
+      let resultsRaw = await CategoryModel.find({})
+        .skip(limit * (page - 1))
+        .limit(limit)
+      let nextResults = await CategoryModel.find({})
+        .skip(limit * page)
+        .limit(limit)
+      let results = resultsRaw.map((value, index) => {
+        return {
+          name: value.name,
+          id: value._id
+        }
+      })
+      return {
+        next: nextResults.length !== 0,
+        categories: results }
     } catch (e) {
       return e.toString()
     }
