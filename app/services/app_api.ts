@@ -44,33 +44,32 @@ export default class AppService {
     let bin = findApplication.binaryPath
     let fullCommand = `${bin} ${command}`
     let start_time: string = Date.parse(new Date().toString()).toString()
+    let responseBasic = {
+      start_time,
+      command: fullCommand,
+      client_ip: ip,
+      application }
     try {
       let execResult = await this.execAsync(fullCommand)
-      let result: IReportItemResponse = {
-        start_time,
+      let response: IReportItemResponse = {
+        ...responseBasic,
         end_time: Date.parse(new Date().toString()).toString(),
-        command: fullCommand,
         succeeded: true,
-        result: execResult,
-        client_ip: ip,
-        application
+        result: execResult
       }
       await ReportsModel.insertMany(<IReportItem[]>[{
-        ...result, views: 0, downloads: 0 }])
-      return result
+        ...response, views: 0, downloads: 0 }])
+      return response
     } catch (e) {
-      let result: IReportItemResponse = {
-        start_time,
+      let response: IReportItemResponse = {
+        ...responseBasic,
         end_time: Date.parse(new Date().toString()).toString(),
-        command: fullCommand,
         succeeded: false,
-        result: e.toString(),
-        client_ip: ip,
-        application
+        result: e.toString()
       }
       await ReportsModel.insertMany(<IReportItem[]>[{
-        ...result, views: 0, downloads: 0 }])
-      return result
+        ...response, views: 0, downloads: 0 }])
+      return response
     }
   }
 
