@@ -29,7 +29,7 @@ export default class APIController {
 
   @Get('application/:id')
   async getApplicationInformation (
-    @Param('id') uuid: string): Promise<IApplication> {
+    @Param('id') uuid: string): Promise<IApplication | string> {
     let result = await this.service.getApplicationInformation(uuid)
     return result
   }

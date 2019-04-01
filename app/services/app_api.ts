@@ -82,9 +82,13 @@ export default class AppService {
    * @return {Promise<IApplication>}
    */
   public async getApplicationInformation (
-    uuid: string): Promise<IApplication> {
-    let result = await AdminManageModel.findOne({ uuid })
-    return result
+    uuid: string): Promise<IApplication | string> {
+    try {
+      let result = await AdminManageModel.findOne({ uuid })
+      return result
+    } catch (e) {
+      return e.toString()
+    }
   }
 
 }
