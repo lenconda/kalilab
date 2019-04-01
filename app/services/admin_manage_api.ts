@@ -1,6 +1,6 @@
 import { Service } from 'typedi'
 import uuidv3 from 'uuid/v3'
-import { AdminManageModel } from '../database/models/admin_manage'
+import { AdminManageModel } from '../database/models'
 import {
   IApplicationRequest,
   IApplication,
