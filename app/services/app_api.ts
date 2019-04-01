@@ -3,7 +3,9 @@ import { exec } from 'child_process'
 import {
   IReportItem,
   IReportItemResponse } from '../../interfaces/reports'
-import { ReportsModel } from '../database/models'
+import {
+  ReportsModel,
+  AdminManageModel } from '../database/models'
 
 @Service()
 export default class AppService {
@@ -37,13 +39,17 @@ export default class AppService {
     application: string,
     ip: string,
     command: string): Promise<IReportItemResponse> {
+    let findApplication =
+      await AdminManageModel.findOne({ uuid: application })
+    let bin = findApplication.binaryPath
+    let fullCommand = `${bin} ${command}`
     let start_time: string = Date.parse(new Date().toString()).toString()
     try {
-      let execResult = await this.execAsync(command)
+      let execResult = await this.execAsync(fullCommand)
       let result: IReportItemResponse = {
         start_time,
         end_time: Date.parse(new Date().toString()).toString(),
-        command,
+        command: fullCommand,
         succeeded: true,
         result: execResult,
         client_ip: ip,
@@ -56,7 +62,7 @@ export default class AppService {
       let result: IReportItemResponse = {
         start_time,
         end_time: Date.parse(new Date().toString()).toString(),
-        command,
+        command: fullCommand,
         succeeded: false,
         result: e.toString(),
         client_ip: ip,
