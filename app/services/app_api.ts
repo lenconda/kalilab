@@ -91,4 +91,28 @@ export default class AppService {
     }
   }
 
+  /**
+   * get all application lists
+   * @public
+   * @async
+   * @return {Promise<IApplication[] | string>}
+   */
+  public async getAllApplications (
+    limit: number,
+    page: number): Promise<IApplication[] | string> {
+    try {
+      let resultsRaw = await AdminManageModel.find({})
+        .skip(limit * (page - 1))
+        .limit(limit)
+      let results = resultsRaw.map((value, index): IApplication => {
+        let { binaryPath, name, avatar, version, updated, uuid } = value
+        return {
+          binaryPath, uuid, updated, version, avatar, name }
+      })
+      return results
+    } catch (e) {
+      return e.toString()
+    }
+  }
+
 }

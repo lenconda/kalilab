@@ -34,4 +34,12 @@ export default class APIController {
     return result
   }
 
+  @Get('applications/:limit/:page')
+  async getAllApplications (
+    @Param('limit') limit: number,
+    @Param('page') page: number): Promise<IApplication[] | string> {
+    let result = await this.service.getAllApplications(limit, page)
+    return result
+  }
+
 }
