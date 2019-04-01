@@ -29,7 +29,8 @@ const adminUserSchema = new mongoose.Schema({
 interface IReportsMongo extends IReportItem, mongoose.Document {}
 
 const reportsSchema = new mongoose.Schema<IReportItem>({
-  date: String,
+  start_time: String,
+  end_time: String,
   command: String,
   succeeded: Boolean,
   client_ip: String,

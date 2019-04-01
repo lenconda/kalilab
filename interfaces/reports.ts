@@ -1,5 +1,6 @@
 export interface IReportItem {
-  date: string
+  start_time: string
+  end_time: string
   command: string
   succeeded: boolean
   client_ip: string
