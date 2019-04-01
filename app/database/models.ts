@@ -31,6 +31,7 @@ interface IReportsMongo extends IReportItem, mongoose.Document {}
 const reportsSchema = new mongoose.Schema<IReportItem>({
   date: String,
   command: String,
+  succeeded: Boolean,
   client_ip: String,
   application: String,
   views: Int32,
