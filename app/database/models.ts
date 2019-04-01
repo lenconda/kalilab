@@ -9,6 +9,8 @@ interface IApplicationMongo extends IApplication, mongoose.Document {}
 const applicationSchema = new mongoose.Schema({
   uuid: { type: String, index: true, unique: true },
   binaryPath: String,
+  brief: String,
+  category: [String],
   name: String,
   avatar: String,
   version: String,
