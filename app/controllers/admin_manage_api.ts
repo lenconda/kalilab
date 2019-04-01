@@ -73,12 +73,20 @@ export default class AdminManageController {
     return result
   }
 
-  @Put('/categories/:id')
+  @Put('/category/:id')
   @Authorized()
   async updateCategory (
     @Param('id') id: string,
     @BodyParam('name') name: string): Promise<IApplicationResponse | string> {
     let result = await this.service.updateCategory(id, name)
+    return result
+  }
+
+  @Delete('/category/:id')
+  @Authorized()
+  async deleteCategory (
+    @Param('id') id: string): Promise<IApplicationResponse | string> {
+    let result = await this.service.deleteCategory(id)
     return result
   }
 

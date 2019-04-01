@@ -188,4 +188,17 @@ export default class AdminManageService {
     }
   }
 
+  public async deleteCategory (
+    id: string): Promise<IApplicationResponse | string> {
+    try {
+      await CategoryModel.findByIdAndDelete(id)
+      return {
+        ok: true,
+        message: `Deleted category ${id}`
+      }
+    } catch (e) {
+      return e.toString()
+    }
+  }
+
 }
