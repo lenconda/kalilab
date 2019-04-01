@@ -2,7 +2,8 @@ import 'reflect-metadata'
 import kcors from 'kcors'
 import Koa from 'koa'
 import bodyParser from 'koa-bodyparser'
-import logger from 'koa-logger'
+import log4koa from 'koa-log4'
+import getLogger from './utils/logger'
 import { useKoaServer, useContainer, Action } from 'routing-controllers'
 import { Container } from 'typedi'
 import { validateToken, getUserIDByToken } from './utils/authorization'
@@ -26,7 +27,8 @@ app.use(kcors())
 
 app.use(bodyParser())
 
-if (process.env.NODE_ENV.toLowerCase() === 'development') app.use(logger())
+if (process.env.NODE_ENV.toLowerCase() === 'development')
+  app.use(log4koa.koaLogger(getLogger(__filename)))
 
 let port: number = process.env.PORT ? parseInt(process.env.PORT) : 3000
 
