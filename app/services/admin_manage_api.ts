@@ -7,7 +7,9 @@ import {
   IApplicationRequest,
   IApplication,
   IApplicationUpdateRequest } from '../../interfaces/admin_manage'
-import { ICategory } from '../../interfaces/category'
+import {
+  ICategory,
+  ICategoryResponse } from '../../interfaces/category'
 import config from '../../config'
 const { UUID_NAMESPACE } = config
 
@@ -136,6 +138,31 @@ export default class AdminManageService {
       return result
     } catch (e) {
       return e.toString()
+    }
+  }
+
+  /**
+   * create a category
+   * @param {string} name
+   * @public
+   * @async
+   * @return {Promise<IApplicationResponse | string>}
+   */
+  public async createCategory (
+    name: string): Promise<IApplicationResponse | string> {
+    try {
+      await CategoryModel.insertMany(<ICategoryResponse[]>[{
+        name
+      }])
+      return {
+        ok: true,
+        message: `Added a new category '${name}'`
+      }
+    } catch (e) {
+      return {
+        ok: false,
+        message: e.toString()
+      }
     }
   }
 

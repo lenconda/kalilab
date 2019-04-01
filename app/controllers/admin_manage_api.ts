@@ -65,4 +65,11 @@ export default class AdminManageController {
     return result
   }
 
+  @Post('/categories')
+  async createCategory (
+    @BodyParam('name') name: string): Promise<IApplicationResponse | string> {
+    let result = await this.service.createCategory(name)
+    return result
+  }
+
 }

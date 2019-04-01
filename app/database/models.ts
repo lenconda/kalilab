@@ -46,7 +46,7 @@ const reportsSchema = new mongoose.Schema<IReportItem>({
 interface ICategoryMongo extends ICategoryResponse, mongoose.Document {}
 
 const categorySchema = new mongoose.Schema<ICategoryResponse>({
-  name: String
+  name: { type: String, index: true, unique: true }
 })
 
 export const AdminManageModel = mongoose.model<IApplicationMongo>('kl_applications', applicationSchema)
