@@ -188,6 +188,13 @@ export default class AdminManageService {
     }
   }
 
+  /**
+   * delete a category
+   * @param {string} id
+   * @public
+   * @async
+   * @return {Promise<IApplicationResponse | string>}
+   */
   public async deleteCategory (
     id: string): Promise<IApplicationResponse | string> {
     try {
