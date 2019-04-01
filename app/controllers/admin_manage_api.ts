@@ -66,9 +66,19 @@ export default class AdminManageController {
   }
 
   @Post('/categories')
+  @Authorized()
   async createCategory (
     @BodyParam('name') name: string): Promise<IApplicationResponse | string> {
     let result = await this.service.createCategory(name)
+    return result
+  }
+
+  @Put('/categories/:id')
+  @Authorized()
+  async updateCategory (
+    @Param('id') id: string,
+    @BodyParam('name') name: string): Promise<IApplicationResponse | string> {
+    let result = await this.service.updateCategory(id, name)
     return result
   }
 
