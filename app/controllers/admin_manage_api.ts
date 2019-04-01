@@ -58,4 +58,11 @@ export default class AdminManageController {
     return result
   }
 
+  @Get('/categories')
+  @Authorized()
+  async getCategories () {
+    let result = await this.service.getAllCategories()
+    return result
+  }
+
 }

@@ -1,10 +1,13 @@
 import { Service } from 'typedi'
 import uuidv3 from 'uuid/v3'
-import { AdminManageModel } from '../database/models'
+import {
+  AdminManageModel,
+  CategoryModel } from '../database/models'
 import {
   IApplicationRequest,
   IApplication,
   IApplicationUpdateRequest } from '../../interfaces/admin_manage'
+import { ICategory } from '../../interfaces/category'
 import config from '../../config'
 const { UUID_NAMESPACE } = config
 
@@ -112,6 +115,27 @@ export default class AdminManageService {
         ok: false,
         message: e.toString()
       }
+    }
+  }
+
+  /**
+   * get all categories
+   * @public
+   * @async
+   * @return { Promise<ICategory[] | string> }
+   */
+  public async getAllCategories (): Promise<ICategory[] | string> {
+    try {
+      let resultRaw = await CategoryModel.find({})
+      let result = resultRaw.map((value, index) => {
+        return {
+          id: value._id,
+          name: value.name
+        }
+      })
+      return result
+    } catch (e) {
+      return e.toString()
     }
   }
 
