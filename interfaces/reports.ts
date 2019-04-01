@@ -1,4 +1,4 @@
-export interface IReportItem {
+export interface IReportItemResponse {
   start_time: string
   end_time: string
   command: string
@@ -6,6 +6,9 @@ export interface IReportItem {
   result: string
   client_ip: string
   application: string
+}
+
+export interface IReportItem extends IReportItemResponse{
   views: number
   downloads: number
 }
