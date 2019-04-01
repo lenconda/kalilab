@@ -33,6 +33,7 @@ const reportsSchema = new mongoose.Schema<IReportItem>({
   end_time: String,
   command: String,
   succeeded: Boolean,
+  result: String,
   client_ip: String,
   application: String,
   views: Int32,
