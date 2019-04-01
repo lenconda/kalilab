@@ -2,6 +2,7 @@ import mongoose from 'mongoose'
 import { IApplication } from '../../interfaces/admin_manage'
 import { IAdminUser } from '../../interfaces/admin_user'
 import { IReportItem } from '../../interfaces/reports'
+import { ICategory } from '../../interfaces/category'
 
 // admin application schema
 interface IApplicationMongo extends IApplication, mongoose.Document {}
@@ -41,6 +42,14 @@ const reportsSchema = new mongoose.Schema<IReportItem>({
   downloads: Number
 })
 
+// category interface
+interface ICategoryMongo extends ICategory, mongoose.Document {}
+
+const categorySchema = new mongoose.Schema<ICategory>({
+  name: String
+})
+
 export const AdminManageModel = mongoose.model<IApplicationMongo>('kl_applications', applicationSchema)
 export const AdminUserModel = mongoose.model<IAdminUserMongo>('kl_users', adminUserSchema)
 export const ReportsModel = mongoose.model<IReportsMongo>('kl_reports', reportsSchema)
+export const CategoryModel = mongoose.model<ICategoryMongo>('kl_categories', categorySchema)
