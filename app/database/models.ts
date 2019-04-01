@@ -39,6 +39,6 @@ const reportsSchema = new mongoose.Schema<IReportItem>({
   downloads: Number
 })
 
-export const AdminManageModel = mongoose.model<IApplicationMongo>('ts_applications', applicationSchema)
-export const AdminUserModel = mongoose.model<IAdminUserMongo>('ts_users', adminUserSchema)
-export const ReportsModel = mongoose.model<IReportsMongo>('ts_reports', reportsSchema)
+export const AdminManageModel = mongoose.model<IApplicationMongo>('kl_applications', applicationSchema)
+export const AdminUserModel = mongoose.model<IAdminUserMongo>('kl_users', adminUserSchema)
+export const ReportsModel = mongoose.model<IReportsMongo>('kl_reports', reportsSchema)
