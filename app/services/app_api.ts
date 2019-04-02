@@ -128,6 +128,9 @@ export default class AppService {
 
   /**
    * get all application lists
+   * @param {number} limit
+   * @param {number} page
+   * @param {string} category
    * @public
    * @async
    * @return {{next: boolean, applications: IApplication[]}}
