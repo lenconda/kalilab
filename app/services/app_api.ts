@@ -30,6 +30,33 @@ export default class AppService {
   }
 
   /**
+   * find results by page
+   * @param {any} model
+   * @param {any} condition
+   * @param {number} limit
+   * @param {number} page
+   * @private
+   * @async
+   * @return {Promise<{ item: any[], next: boolean }>}
+   */
+  private async pagination (
+    model: any,
+    condition: any,
+    limit: number,
+    page: number): Promise<{ items: any[], next: boolean }> {
+    let results = await model.find(condition)
+      .skip(limit * (page - 1))
+      .limit(limit)
+    let nextResults = await model.find(condition)
+      .skip(limit * page)
+      .limit(limit)
+    return {
+      items: results,
+      next: nextResults.length !== 0
+    }
+  }
+
+  /**
    * run application and get results
    * @param {string} application
    * @param {string} ip
@@ -102,23 +129,11 @@ export default class AppService {
   public async getAllApplications (
     limit: number,
     page: number,
-    category?: string): Promise<{ next: boolean, applications: IApplication[] } | string> {
+    category?: string): Promise<{ next: boolean, items: IApplication[] } | string> {
     let query = category ? { category } : {}
     try {
-      let resultsRaw = await AdminManageModel.find(query)
-        .skip(limit * (page - 1))
-        .limit(limit)
-      let results = resultsRaw.map((value, index): IApplication => {
-        let { binaryPath, name, avatar, version, updated, uuid, brief, category } = value
-        return {
-          binaryPath, uuid, updated, version, avatar, name, brief, category }
-      })
-      let nextResults = await AdminManageModel.find({})
-        .skip(limit * page)
-        .limit(limit)
-      return {
-        next: nextResults.length !== 0,
-        applications: results }
+      let result = await this.pagination(AdminManageModel, query, limit, page)
+      return result
     } catch (e) {
       return e.toString()
     }
@@ -134,23 +149,18 @@ export default class AppService {
    */
   public async getAllCategories (
     limit: number,
-    page: number): Promise<{ next: boolean, categories: ICategoryResponse[] } | string> {
+    page: number): Promise<{ next: boolean, items: ICategoryResponse[] } | string> {
     try {
-      let resultsRaw = await CategoryModel.find({})
-        .skip(limit * (page - 1))
-        .limit(limit)
-      let nextResults = await CategoryModel.find({})
-        .skip(limit * page)
-        .limit(limit)
-      let results = resultsRaw.map((value, index) => {
-        return {
-          name: value.name,
-          id: value._id
-        }
-      })
+      let result = await this.pagination(CategoryModel, {}, limit, page)
       return {
-        next: nextResults.length !== 0,
-        categories: results }
+        next: result.next,
+        items: result.items.map((value, index) => {
+          return {
+            id: value._id,
+            name: value.name
+          }
+        })
+      }
     } catch (e) {
       return e.toString()
     }

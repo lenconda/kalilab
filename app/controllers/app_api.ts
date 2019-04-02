@@ -8,7 +8,9 @@ import {
   Get } from 'routing-controllers'
 import AppService from '../services/app_api'
 import { Inject } from 'typedi'
-import { IReportItemResponse } from '../../interfaces/reports'
+import {
+  IReportItem,
+  IReportItemResponse } from '../../interfaces/reports'
 import { IApplication } from '../../interfaces/admin_manage'
 import { ICategoryResponse } from '../../interfaces/category'
 import { Context } from 'koa'
@@ -40,7 +42,7 @@ export default class APIController {
   async getAllApplications (
     @QueryParam('limit') limit: number,
     @QueryParam('page') page: number,
-    @QueryParam('category') category: string): Promise<{ next: boolean, applications: IApplication[] } | string> {
+    @QueryParam('category') category: string): Promise<{ next: boolean, items: IApplication[] } | string> {
     let result = await this.service.getAllApplications(limit, page, category)
     return result
   }
@@ -48,9 +50,17 @@ export default class APIController {
   @Get('categories')
   async getAllCategories (
     @QueryParam('limit') limit: number,
-    @QueryParam('page') page: number): Promise<{ next: boolean, categories: ICategoryResponse[] } | string> {
+    @QueryParam('page') page: number): Promise<{ next: boolean, items: ICategoryResponse[] } | string> {
     let result = await this.service.getAllCategories(limit, page)
     return result
   }
+
+  // @Get('reports')
+  // async getAllReports (
+  //   @QueryParam('limit') limit: number,
+  //   @QueryParam('page') page: number,
+  //   @QueryParam('app') id: number): Promise<IReportItem[] | string> {
+  //
+  // }
 
 }
