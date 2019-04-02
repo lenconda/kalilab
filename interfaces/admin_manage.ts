@@ -1,10 +1,18 @@
-export interface IApplicationRequest {
-  binaryPath: string
+interface IApplicationBase {
   name: string
   avatar: string
   version: string
   brief: string
   category: string[]
+}
+
+export interface IApplicationRequest extends IApplicationBase {
+  binaryPath: string
+}
+
+export interface IApplicationSummary {
+  id: string
+  updated: string
 }
 
 export interface IApplication extends IApplicationRequest {

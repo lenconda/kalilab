@@ -28,7 +28,7 @@ export default class AdminManageController {
     @BodyParam('avatar') avatar: string,
     @BodyParam('version') version: string,
     @BodyParam('brief') brief: string,
-    @BodyParam('category') category: string[] | any[]): Promise<string> {
+    @BodyParam('category') category: string[]): Promise<string> {
     let result = this.service.addApplication({
       binaryPath, name, version, avatar, brief, category
     })

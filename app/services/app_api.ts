@@ -7,7 +7,8 @@ import {
   IGetReportDetailItem } from '../../interfaces/reports'
 import {
   IApplication,
-  IApplicationItem } from '../../interfaces/admin_manage'
+  IApplicationItem,
+  IApplicationSummary } from '../../interfaces/admin_manage'
 import { ICategoryResponse } from '../../interfaces/category'
 import {
   ReportsModel,
@@ -135,12 +136,12 @@ export default class AppService {
    * @param {string} category
    * @public
    * @async
-   * @return {{next: boolean, applications: IApplication[]}}
+   * @return {{next: boolean, applications: IApplicationSummary[]}}
    */
   public async getAllApplications (
     limit: number,
     page: number,
-    category?: string): Promise<{ next: boolean, items: any[] }> {
+    category?: string): Promise<{ next: boolean, items: IApplicationSummary[] }> {
     let query = category ? { category } : {}
     try {
       let result = await this.pagination(AdminManageModel, query, limit, page)
@@ -227,7 +228,8 @@ export default class AppService {
    * @async
    * @return {Promise<IGetReportDetailItem>}
    */
-  public async getReportInformation (id: string): Promise<IGetReportDetailItem> {
+  public async getReportInformation (
+    id: string): Promise<IGetReportDetailItem> {
     try {
       let results = await ReportsModel.findById(id)
       let { client_ip, start_time, end_time, succeeded, views,
