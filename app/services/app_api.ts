@@ -79,7 +79,6 @@ export default class AppService {
     let fullCommand = `${bin} ${command}`
     let start_time: string = Date.parse(new Date().toString()).toString()
     let responseBasic = {
-      uuid: uuidv3(`${fullCommand}@${ip}@${start_time}`, UUID_NAMESPACE),
       start_time,
       command: fullCommand,
       client_ip: ip,
@@ -204,10 +203,10 @@ export default class AppService {
       let items = []
       for (let item of result.items) {
         let {
-          uuid, succeeded, end_time, views, downloads, application, command } = item
+          _id, succeeded, end_time, views, downloads, application, command } = item
         let appInformation = await this.getApplicationInformation(application)
         items.push({
-          uuid, succeeded, end_time, views, downloads,
+          id: _id, succeeded, end_time, views, downloads,
           application_name: appInformation.name,
           application_id: application,
           command })
@@ -228,9 +227,10 @@ export default class AppService {
    * @async
    * @return {Promise<IReportItem>}
    */
-  public async getReportInformation (uuid: string): Promise<any> {
+  public async getReportInformation (id: string): Promise<any> {
     try {
-      let results = await ReportsModel.findOne({ uuid })
+      let results = await ReportsModel.findById(id)
+      console.log(results)
       let { client_ip, start_time, end_time, succeeded, views,
         downloads, result, application, command } = results
       return {

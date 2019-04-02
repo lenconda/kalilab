@@ -66,7 +66,7 @@ export default class APIController {
 
   @Get('report/:id')
   async getReportInformation (
-    @QueryParam('id') id: string): Promise<IReportItem> {
+    @Param('id') id: string): Promise<any> {
     let result = await this.service.getReportInformation(id)
     return result
   }

@@ -32,7 +32,6 @@ interface IReportsMongo extends IReportMongoItem, mongoose.Document {}
 const reportsSchema = new mongoose.Schema<IReportMongoItem>({
   start_time: String,
   end_time: String,
-  uuid: String,
   command: String,
   succeeded: Boolean,
   result: String,
