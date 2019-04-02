@@ -33,7 +33,7 @@ export default class APIController {
 
   @Get('application/:id')
   async getApplicationInformation (
-    @Param('id') uuid: string): Promise<IApplication | string> {
+    @Param('id') uuid: string): Promise<IApplication> {
     let result = await this.service.getApplicationInformation(uuid)
     return result
   }
@@ -42,7 +42,7 @@ export default class APIController {
   async getAllApplications (
     @QueryParam('limit') limit: number,
     @QueryParam('page') page: number,
-    @QueryParam('category') category: string): Promise<{ next: boolean, items: IApplication[] } | string> {
+    @QueryParam('category') category: string): Promise<{next: boolean, items: IApplication[]}> {
     let result = await this.service.getAllApplications(limit, page, category)
     return result
   }
@@ -50,7 +50,7 @@ export default class APIController {
   @Get('categories')
   async getAllCategories (
     @QueryParam('limit') limit: number,
-    @QueryParam('page') page: number): Promise<{ next: boolean, items: ICategoryResponse[] } | string> {
+    @QueryParam('page') page: number): Promise<{next: boolean, items: ICategoryResponse[]}> {
     let result = await this.service.getAllCategories(limit, page)
     return result
   }

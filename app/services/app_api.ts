@@ -111,12 +111,12 @@ export default class AppService {
    * @return {Promise<IApplication>}
    */
   public async getApplicationInformation (
-    uuid: string): Promise<IApplication | string> {
+    uuid: string): Promise<IApplication> {
     try {
       let result = await AdminManageModel.findOne({ uuid })
       return result
     } catch (e) {
-      return e.toString()
+      throw new Error(e)
     }
   }
 
@@ -124,18 +124,18 @@ export default class AppService {
    * get all application lists
    * @public
    * @async
-   * @return { { next: boolean, applications: IApplication[] } | string }
+   * @return {{next: boolean, applications: IApplication[]}}
    */
   public async getAllApplications (
     limit: number,
     page: number,
-    category?: string): Promise<{ next: boolean, items: IApplication[] } | string> {
+    category?: string): Promise<{ next: boolean, items: IApplication[] }> {
     let query = category ? { category } : {}
     try {
       let result = await this.pagination(AdminManageModel, query, limit, page)
       return result
     } catch (e) {
-      return e.toString()
+      throw new Error(e)
     }
   }
 
@@ -145,11 +145,11 @@ export default class AppService {
    * @param {number} page
    * @public
    * @async
-   * @return { Promise<{ next: boolean, categories: ICategoryResponse[] } | string>}
+   * @return { Promise<{next: boolean, categories: ICategoryResponse[]}>}
    */
   public async getAllCategories (
     limit: number,
-    page: number): Promise<{ next: boolean, items: ICategoryResponse[] } | string> {
+    page: number): Promise<{next: boolean, items: ICategoryResponse[]}> {
     try {
       let result = await this.pagination(CategoryModel, {}, limit, page)
       return {
@@ -162,7 +162,7 @@ export default class AppService {
         })
       }
     } catch (e) {
-      return e.toString()
+      throw new Error(e)
     }
   }
 

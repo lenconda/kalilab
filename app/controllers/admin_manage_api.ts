@@ -8,8 +8,7 @@ import {
   Param,
   Delete
 } from 'routing-controllers'
-import AdminManageService, {
-  IApplicationResponse, } from '../services/admin_manage_api'
+import AdminManageService from '../services/admin_manage_api'
 import {
   IApplication,
   IApplicationUpdateRequest } from '../../interfaces/admin_manage'
@@ -28,7 +27,7 @@ export default class AdminManageController {
     @BodyParam('name') name: string,
     @BodyParam('avatar') avatar: string,
     @BodyParam('version') version: string,
-    @BodyParam('brief') brief: string): Promise<IApplicationResponse> {
+    @BodyParam('brief') brief: string): Promise<string> {
     let result = this.service.addApplication({
       binaryPath, name, version, avatar, brief
     })
@@ -37,7 +36,7 @@ export default class AdminManageController {
 
   @Get('/application')
   @Authorized()
-  async getAllApplications (): Promise<IApplication[] | string> {
+  async getAllApplications (): Promise<IApplication[]> {
     let results = await this.service.getAllApplications()
     return results
   }
@@ -46,7 +45,7 @@ export default class AdminManageController {
   @Authorized()
   async modifyApplicationInformation (
     @Param('id') uuid: string,
-    @BodyParam('updates') updates: IApplicationUpdateRequest ): Promise<IApplicationResponse> {
+    @BodyParam('updates') updates: IApplicationUpdateRequest ): Promise<string> {
     let result = await this.service.modifyApplicationInformation(updates, uuid)
     return result
   }
@@ -54,7 +53,7 @@ export default class AdminManageController {
   @Delete('/application/:id')
   @Authorized()
   async deleteApplication (
-    @Param('id') uuid: string): Promise<IApplicationResponse> {
+    @Param('id') uuid: string): Promise<string> {
     let result = await this.service.deleteApplication(uuid)
     return result
   }
@@ -69,7 +68,7 @@ export default class AdminManageController {
   @Post('/categories')
   @Authorized()
   async createCategory (
-    @BodyParam('name') name: string): Promise<IApplicationResponse | string> {
+    @BodyParam('name') name: string): Promise<string> {
     let result = await this.service.createCategory(name)
     return result
   }
@@ -78,7 +77,7 @@ export default class AdminManageController {
   @Authorized()
   async updateCategory (
     @Param('id') id: string,
-    @BodyParam('name') name: string): Promise<IApplicationResponse | string> {
+    @BodyParam('name') name: string): Promise<string> {
     let result = await this.service.updateCategory(id, name)
     return result
   }
@@ -86,7 +85,7 @@ export default class AdminManageController {
   @Delete('/category/:id')
   @Authorized()
   async deleteCategory (
-    @Param('id') id: string): Promise<IApplicationResponse | string> {
+    @Param('id') id: string): Promise<string> {
     let result = await this.service.deleteCategory(id)
     return result
   }

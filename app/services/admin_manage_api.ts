@@ -13,11 +13,6 @@ import {
 import config from '../../config'
 const { UUID_NAMESPACE } = config
 
-export interface IApplicationResponse {
-  ok: boolean
-  message: string
-}
-
 @Service()
 export default class AdminManageService {
 
@@ -26,10 +21,10 @@ export default class AdminManageService {
    * @param {IApplication} applicationInformation
    * @public
    * @async
-   * @return {IApplicationResponse}
+   * @return {Promise<string>}
    */
   public async addApplication (
-    applicationInformation: IApplicationRequest): Promise<IApplicationResponse> {
+    applicationInformation: IApplicationRequest): Promise<string> {
     let { binaryPath, avatar, name, version, brief } = applicationInformation
     let uuid = uuidv3(`${binaryPath}:${version}`, UUID_NAMESPACE)
     let updated = Date.parse(new Date().toString()).toString()
@@ -38,15 +33,9 @@ export default class AdminManageService {
         binaryPath, avatar, name, version,
         uuid, updated, brief, category: []
       }])
-      return {
-        ok: true,
-        message: `Added application ${result[0].name}`
-      }
+      return `Added application ${result[0].name}`
     } catch (e) {
-      return {
-        ok: false,
-        message: e.toString()
-      }
+      throw new Error(e)
     }
   }
 
@@ -54,9 +43,9 @@ export default class AdminManageService {
    * get all application lists
    * @public
    * @async
-   * @return {Promise<IApplication[] | string>}
+   * @return {Promise<IApplication[]>}
    */
-  public async getAllApplications (): Promise<IApplication[] | string> {
+  public async getAllApplications (): Promise<IApplication[]> {
     try {
       let resultsRaw = await AdminManageModel.find({})
       let results = resultsRaw.map((value, index): IApplication => {
@@ -66,7 +55,7 @@ export default class AdminManageService {
       })
       return results
     } catch (e) {
-      return e.toString()
+      throw new Error(e)
     }
   }
 
@@ -76,25 +65,19 @@ export default class AdminManageService {
    * @param {string} uuid
    * @public
    * @async
-   * @return {IApplicationResponse}
+   * @return {Promise<string>}
    */
   public async modifyApplicationInformation (
     updatedInformation: IApplicationUpdateRequest,
-    uuid: string): Promise<IApplicationResponse> {
+    uuid: string): Promise<string> {
     try {
       await AdminManageModel.updateOne({ uuid }, {
         ...updatedInformation,
         updated: Date.parse(new Date().toString()).toString()
       })
-      return {
-        ok: true,
-        message: `Updated application ${uuid}`
-      }
+      return `Updated application ${uuid}`
     } catch (e) {
-      return {
-        ok: false,
-        message: e.toString()
-      }
+      throw new Error(e)
     }
   }
 
@@ -103,20 +86,14 @@ export default class AdminManageService {
    * @param {string} uuid
    * @public
    * @async
-   * @return {IApplicationResponse}
+   * @return {Promise<string>}
    */
-  public async deleteApplication (uuid: string): Promise<IApplicationResponse> {
+  public async deleteApplication (uuid: string): Promise<string> {
     try {
       await AdminManageModel.deleteOne({ uuid })
-      return {
-        ok: true,
-        message: `Deleted application ${uuid}`
-      }
+      return `Deleted application ${uuid}`
     } catch (e) {
-      return {
-        ok: false,
-        message: e.toString()
-      }
+      throw new Error(e)
     }
   }
 
@@ -124,9 +101,9 @@ export default class AdminManageService {
    * get all categories
    * @public
    * @async
-   * @return { Promise<ICategory[] | string> }
+   * @return { Promise<ICategory[]> }
    */
-  public async getAllCategories (): Promise<ICategory[] | string> {
+  public async getAllCategories (): Promise<ICategory[]> {
     try {
       let resultRaw = await CategoryModel.find({})
       let result = resultRaw.map((value, index) => {
@@ -137,7 +114,7 @@ export default class AdminManageService {
       })
       return result
     } catch (e) {
-      return e.toString()
+      throw new Error(e)
     }
   }
 
@@ -146,23 +123,17 @@ export default class AdminManageService {
    * @param {string} name
    * @public
    * @async
-   * @return {Promise<IApplicationResponse | string>}
+   * @return {Promise<string>}
    */
   public async createCategory (
-    name: string): Promise<IApplicationResponse | string> {
+    name: string): Promise<string> {
     try {
       await CategoryModel.insertMany(<ICategoryResponse[]>[{
         name
       }])
-      return {
-        ok: true,
-        message: `Added a new category '${name}'`
-      }
+      return `Added a new category '${name}'`
     } catch (e) {
-      return {
-        ok: false,
-        message: e.toString()
-      }
+      throw new Error(e)
     }
   }
 
@@ -172,19 +143,16 @@ export default class AdminManageService {
    * @param {string} name
    * @public
    * @async
-   * @return {Promise<IApplicationResponse | string>}
+   * @return {Promise<string>}
    */
   public async updateCategory (
     id: string,
-    name: string): Promise<IApplicationResponse | string> {
+    name: string): Promise<string> {
     try {
       await CategoryModel.findByIdAndUpdate(id, { name })
-      return {
-        ok: true,
-        message: `Updated category ${name}(${id})`
-      }
+      return `Updated category ${name}(${id})`
     } catch (e) {
-      return e.toString()
+      throw new Error(e)
     }
   }
 
@@ -193,18 +161,15 @@ export default class AdminManageService {
    * @param {string} id
    * @public
    * @async
-   * @return {Promise<IApplicationResponse | string>}
+   * @return {Promise<string>}
    */
   public async deleteCategory (
-    id: string): Promise<IApplicationResponse | string> {
+    id: string): Promise<string> {
     try {
       await CategoryModel.findByIdAndDelete(id)
-      return {
-        ok: true,
-        message: `Deleted category ${id}`
-      }
+      return `Deleted category ${id}`
     } catch (e) {
-      return e.toString()
+      throw new Error(e)
     }
   }
 
