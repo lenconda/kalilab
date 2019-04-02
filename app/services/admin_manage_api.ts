@@ -23,11 +23,11 @@ export default class AdminManageService {
    */
   public async addApplication (
     applicationInformation: IApplicationRequest): Promise<string> {
-    let { binaryPath, avatar, name, version, brief } = applicationInformation
+    let { binaryPath, avatar, name, version, brief, category } = applicationInformation
     let updated = Date.parse(new Date().toString()).toString()
     try {
       let result = await AdminManageModel.insertMany(<IApplication[]>[{
-        binaryPath, avatar, name, version, updated, brief, category: []}])
+        binaryPath, avatar, name, version, updated, brief, category}])
       return `Added application ${result[0].name}`
     } catch (e) {
       throw new Error(e)

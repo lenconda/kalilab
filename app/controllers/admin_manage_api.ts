@@ -27,9 +27,10 @@ export default class AdminManageController {
     @BodyParam('name') name: string,
     @BodyParam('avatar') avatar: string,
     @BodyParam('version') version: string,
-    @BodyParam('brief') brief: string): Promise<string> {
+    @BodyParam('brief') brief: string,
+    @BodyParam('category') category: string[] | any[]): Promise<string> {
     let result = this.service.addApplication({
-      binaryPath, name, version, avatar, brief
+      binaryPath, name, version, avatar, brief, category
     })
     return result
   }

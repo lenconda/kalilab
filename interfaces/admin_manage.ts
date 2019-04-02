@@ -4,11 +4,11 @@ export interface IApplicationRequest {
   avatar: string
   version: string
   brief: string
+  category: string[]
 }
 
 export interface IApplication extends IApplicationRequest {
   updated: string
-  category: string[]
 }
 
 export interface IApplicationItem extends IApplication {
