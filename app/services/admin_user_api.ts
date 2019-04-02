@@ -41,7 +41,7 @@ export default class AdminUserService {
       let payload = {
         id: results._id.toString()
       }
-      return { ok: true, token: jwt.sign(payload, 'kalilab', { expiresIn: '1day' }) }
+      return { ok: true, token: jwt.sign(payload, 'kalilabs', { expiresIn: '1day' }) }
     } else {
       return { ok: false, token: null }
     }
