@@ -44,17 +44,17 @@ export default class AdminManageController {
   @Put('/application/:id')
   @Authorized()
   async modifyApplicationInformation (
-    @Param('id') uuid: string,
+    @Param('id') id: string,
     @BodyParam('updates') updates: IApplicationUpdateRequest ): Promise<string> {
-    let result = await this.service.modifyApplicationInformation(updates, uuid)
+    let result = await this.service.modifyApplicationInformation(updates, id)
     return result
   }
 
   @Delete('/application/:id')
   @Authorized()
   async deleteApplication (
-    @Param('id') uuid: string): Promise<string> {
-    let result = await this.service.deleteApplication(uuid)
+    @Param('id') id: string): Promise<string> {
+    let result = await this.service.deleteApplication(id)
     return result
   }
 

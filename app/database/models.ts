@@ -8,8 +8,7 @@ import { ICategoryResponse } from '../../interfaces/category'
 interface IApplicationMongo extends IApplication, mongoose.Document {}
 
 const applicationSchema = new mongoose.Schema({
-  uuid: { type: String, index: true, unique: true },
-  binaryPath: String,
+  binaryPath: { type: String, index: true, unique: true },
   brief: String,
   category: [String],
   name: String,

@@ -1,17 +1,15 @@
 import { Service } from 'typedi'
-import uuidv3 from 'uuid/v3'
 import {
   AdminManageModel,
   CategoryModel } from '../database/models'
 import {
   IApplicationRequest,
   IApplication,
+  IApplicationItem,
   IApplicationUpdateRequest } from '../../interfaces/admin_manage'
 import {
   ICategory,
   ICategoryResponse } from '../../interfaces/category'
-import config from '../../config'
-const { UUID_NAMESPACE } = config
 
 @Service()
 export default class AdminManageService {
@@ -26,13 +24,10 @@ export default class AdminManageService {
   public async addApplication (
     applicationInformation: IApplicationRequest): Promise<string> {
     let { binaryPath, avatar, name, version, brief } = applicationInformation
-    let uuid = uuidv3(`${binaryPath}:${version}`, UUID_NAMESPACE)
     let updated = Date.parse(new Date().toString()).toString()
     try {
       let result = await AdminManageModel.insertMany(<IApplication[]>[{
-        binaryPath, avatar, name, version,
-        uuid, updated, brief, category: []
-      }])
+        binaryPath, avatar, name, version, updated, brief, category: []}])
       return `Added application ${result[0].name}`
     } catch (e) {
       throw new Error(e)
@@ -45,13 +40,14 @@ export default class AdminManageService {
    * @async
    * @return {Promise<IApplication[]>}
    */
-  public async getAllApplications (): Promise<IApplication[]> {
+  public async getAllApplications (): Promise<IApplicationItem[]> {
     try {
       let resultsRaw = await AdminManageModel.find({})
-      let results = resultsRaw.map((value, index): IApplication => {
-        let { binaryPath, name, avatar, version, updated, uuid, category, brief } = value
+      let results = resultsRaw.map((value, index): IApplicationItem => {
+        let { _id, binaryPath, name, avatar, version, updated, category, brief } = value
         return {
-          binaryPath, uuid, updated, version, avatar, name, category, brief }
+          id: _id,
+          binaryPath, updated, version, avatar, name, category, brief }
       })
       return results
     } catch (e) {
@@ -62,20 +58,20 @@ export default class AdminManageService {
   /**
    * update application information
    * @param {IApplicationUpdateRequest} updatedInformation
-   * @param {string} uuid
+   * @param {string} id
    * @public
    * @async
    * @return {Promise<string>}
    */
   public async modifyApplicationInformation (
     updatedInformation: IApplicationUpdateRequest,
-    uuid: string): Promise<string> {
+    id: string): Promise<string> {
     try {
-      await AdminManageModel.updateOne({ uuid }, {
+      await AdminManageModel.findByIdAndUpdate(id, {
         ...updatedInformation,
         updated: Date.parse(new Date().toString()).toString()
       })
-      return `Updated application ${uuid}`
+      return `Updated application ${id}`
     } catch (e) {
       throw new Error(e)
     }
@@ -83,15 +79,15 @@ export default class AdminManageService {
 
   /**
    * delete an application
-   * @param {string} uuid
+   * @param {string} id
    * @public
    * @async
    * @return {Promise<string>}
    */
-  public async deleteApplication (uuid: string): Promise<string> {
+  public async deleteApplication (id: string): Promise<string> {
     try {
-      await AdminManageModel.deleteOne({ uuid })
-      return `Deleted application ${uuid}`
+      await AdminManageModel.findByIdAndDelete(id)
+      return `Deleted application ${id}`
     } catch (e) {
       throw new Error(e)
     }

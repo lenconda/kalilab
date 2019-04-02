@@ -7,9 +7,12 @@ export interface IApplicationRequest {
 }
 
 export interface IApplication extends IApplicationRequest {
-  uuid: string
   updated: string
   category: string[]
+}
+
+export interface IApplicationItem extends IApplication {
+  id: string
 }
 
 export interface IApplicationUpdateRequest {

@@ -3,7 +3,9 @@ import { exec } from 'child_process'
 import {
   IReportItem,
   IReportItemResponse } from '../../interfaces/reports'
-import { IApplication } from '../../interfaces/admin_manage'
+import {
+  IApplication,
+  IApplicationItem } from '../../interfaces/admin_manage'
 import { ICategoryResponse } from '../../interfaces/category'
 import {
   ReportsModel,
@@ -70,7 +72,7 @@ export default class AppService {
     ip: string,
     command: string): Promise<IReportItemResponse> {
     let findApplication =
-      await AdminManageModel.findOne({ uuid: application })
+      await AdminManageModel.findById(application)
     let bin = findApplication.binaryPath
     let fullCommand = `${bin} ${command}`
     let start_time: string = Date.parse(new Date().toString()).toString()
@@ -105,16 +107,20 @@ export default class AppService {
 
   /**
    * return information of the specific application
-   * @param {string} uuid
+   * @param {string} id
    * @public
    * @async
    * @return {Promise<IApplication>}
    */
   public async getApplicationInformation (
-    uuid: string): Promise<IApplication> {
+    id: string): Promise<IApplicationItem> {
     try {
-      let result = await AdminManageModel.findOne({ uuid })
-      return result
+      let result = await AdminManageModel.findById(id)
+      let { _id, binaryPath, category, brief, name, avatar, version, updated } = result
+      return {
+        id: _id,
+        binaryPath, updated, version, avatar, name, brief, category
+      }
     } catch (e) {
       throw new Error(e)
     }
@@ -129,11 +135,19 @@ export default class AppService {
   public async getAllApplications (
     limit: number,
     page: number,
-    category?: string): Promise<{ next: boolean, items: IApplication[] }> {
+    category?: string): Promise<{ next: boolean, items: IApplicationItem[] }> {
     let query = category ? { category } : {}
     try {
       let result = await this.pagination(AdminManageModel, query, limit, page)
-      return result
+      return {
+        next: result.next,
+        items: result.items.map((value, index) => {
+          let { _id, binaryPath, name, avatar, version, updated, category, brief } = value
+          return {
+            id: _id,
+            binaryPath, updated, version, avatar, name, category, brief }
+        })
+      }
     } catch (e) {
       throw new Error(e)
     }
