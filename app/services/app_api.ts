@@ -191,7 +191,7 @@ export default class AppService {
    * @param {string} application
    * @public
    * @async
-   * @return {Promise<{next: boolean, items: any[]}>}
+   * @return {Promise<{next: boolean, items: IGetReportItem[]}>}
    */
   public async getAllReports (
     limit: number,
@@ -225,7 +225,7 @@ export default class AppService {
    * @param {string} id
    * @public
    * @async
-   * @return {Promise<IReportItem>}
+   * @return {Promise<IGetReportDetailItem>}
    */
   public async getReportInformation (id: string): Promise<IGetReportDetailItem> {
     try {
