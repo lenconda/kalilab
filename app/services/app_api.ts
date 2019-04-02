@@ -1,9 +1,10 @@
 import { Service } from 'typedi'
 import { exec } from 'child_process'
-import uuidv3 from 'uuid/v3'
 import {
   IReportItem,
-  IReportItemResponse } from '../../interfaces/reports'
+  IReportItemResponse,
+  IGetReportItem,
+  IGetReportDetailItem } from '../../interfaces/reports'
 import {
   IApplication,
   IApplicationItem } from '../../interfaces/admin_manage'
@@ -12,7 +13,6 @@ import {
   ReportsModel,
   AdminManageModel,
   CategoryModel } from '../database/models'
-const UUID_NAMESPACE = 'b4e19c21-f97f-489f-9aa7-37e108a50c6f'
 
 @Service()
 export default class AppService {
@@ -196,17 +196,17 @@ export default class AppService {
   public async getAllReports (
     limit: number,
     page: number,
-    application?: string): Promise<{next: boolean, items: any[]}> {
+    application?: string): Promise<{next: boolean, items: IGetReportItem[]}> {
     try {
       let condition = application ? { application } : {}
       let result = await this.pagination(ReportsModel, condition, limit, page)
       let items = []
       for (let item of result.items) {
         let {
-          _id, succeeded, end_time, views, downloads, application, command } = item
+          _id, succeeded, start_time, end_time, views, downloads, application, command } = item
         let appInformation = await this.getApplicationInformation(application)
         items.push({
-          id: _id, succeeded, end_time, views, downloads,
+          id: _id, succeeded, end_time, start_time, views, downloads,
           application_name: appInformation.name,
           application_id: application,
           command })
@@ -227,15 +227,16 @@ export default class AppService {
    * @async
    * @return {Promise<IReportItem>}
    */
-  public async getReportInformation (id: string): Promise<any> {
+  public async getReportInformation (id: string): Promise<IGetReportDetailItem> {
     try {
       let results = await ReportsModel.findById(id)
-      console.log(results)
       let { client_ip, start_time, end_time, succeeded, views,
         downloads, result, application, command } = results
+      let appInformation = await this.getApplicationInformation(application)
       return {
-        client_ip, application, result, downloads, views,
-        succeeded, end_time, start_time, command
+        application_name: appInformation.name,
+        application_id: application,
+        result, downloads, views, succeeded, end_time, start_time, command
       }
     } catch (e) {
       throw new Error(e)
