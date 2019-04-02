@@ -40,8 +40,8 @@ export default class APIController {
 
   @Get('applications')
   async getAllApplications (
-    @QueryParam('limit') limit: number,
-    @QueryParam('page') page: number,
+    @QueryParam('limit') limit: number = 10,
+    @QueryParam('page') page: number = 1,
     @QueryParam('category') category: string): Promise<{next: boolean, items: IApplication[]}> {
     let result = await this.service.getAllApplications(limit, page, category)
     return result
@@ -49,18 +49,19 @@ export default class APIController {
 
   @Get('categories')
   async getAllCategories (
-    @QueryParam('limit') limit: number,
-    @QueryParam('page') page: number): Promise<{next: boolean, items: ICategoryResponse[]}> {
+    @QueryParam('limit') limit: number = 10,
+    @QueryParam('page') page: number = 1): Promise<{next: boolean, items: ICategoryResponse[]}> {
     let result = await this.service.getAllCategories(limit, page)
     return result
   }
 
-  // @Get('reports')
-  // async getAllReports (
-  //   @QueryParam('limit') limit: number,
-  //   @QueryParam('page') page: number,
-  //   @QueryParam('app') id: number): Promise<IReportItem[] | string> {
-  //
-  // }
+  @Get('reports')
+  async getAllReports (
+    @QueryParam('limit') limit: number = 10,
+    @QueryParam('page') page: number = 1,
+    @QueryParam('app') id: string): Promise<{next: boolean, items: IReportItem[]}> {
+    let result = await this.service.getAllReports(limit, page, id)
+    return result
+  }
 
 }
