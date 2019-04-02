@@ -59,7 +59,7 @@ export default class APIController {
   async getAllReports (
     @QueryParam('limit') limit: number = 10,
     @QueryParam('page') page: number = 1,
-    @QueryParam('app') id: string): Promise<{next: boolean, items: IReportItem[]}> {
+    @QueryParam('application') id: string): Promise<{next: boolean, items: IReportItem[]}> {
     let result = await this.service.getAllReports(limit, page, id)
     return result
   }
