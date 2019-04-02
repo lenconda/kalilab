@@ -1,7 +1,7 @@
 import mongoose from 'mongoose'
 import { IApplication } from '../../interfaces/admin_manage'
 import { IAdminUser } from '../../interfaces/admin_user'
-import { IReportItem } from '../../interfaces/reports'
+import { IReportMongoItem } from '../../interfaces/reports'
 import { ICategoryResponse } from '../../interfaces/category'
 
 // admin application schema
@@ -27,11 +27,12 @@ const adminUserSchema = new mongoose.Schema({
 })
 
 // reports schema
-interface IReportsMongo extends IReportItem, mongoose.Document {}
+interface IReportsMongo extends IReportMongoItem, mongoose.Document {}
 
-const reportsSchema = new mongoose.Schema<IReportItem>({
+const reportsSchema = new mongoose.Schema<IReportMongoItem>({
   start_time: String,
   end_time: String,
+  uuid: String,
   command: String,
   succeeded: Boolean,
   result: String,

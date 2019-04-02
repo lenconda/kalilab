@@ -1,5 +1,6 @@
 import { Service } from 'typedi'
 import { exec } from 'child_process'
+import uuidv3 from 'uuid/v3'
 import {
   IReportItem,
   IReportItemResponse } from '../../interfaces/reports'
@@ -11,6 +12,7 @@ import {
   ReportsModel,
   AdminManageModel,
   CategoryModel } from '../database/models'
+const UUID_NAMESPACE = 'b4e19c21-f97f-489f-9aa7-37e108a50c6f'
 
 @Service()
 export default class AppService {
@@ -77,6 +79,7 @@ export default class AppService {
     let fullCommand = `${bin} ${command}`
     let start_time: string = Date.parse(new Date().toString()).toString()
     let responseBasic = {
+      uuid: uuidv3(`${fullCommand}@${ip}@${start_time}`, UUID_NAMESPACE),
       start_time,
       command: fullCommand,
       client_ip: ip,
@@ -201,10 +204,10 @@ export default class AppService {
       let items = []
       for (let item of result.items) {
         let {
-          _id, result, succeeded, end_time, views, downloads, application, command } = item
+          uuid, succeeded, end_time, views, downloads, application, command } = item
         let appInformation = await this.getApplicationInformation(application)
         items.push({
-          id: _id, result, succeeded, end_time, views, downloads,
+          uuid, succeeded, end_time, views, downloads,
           application_name: appInformation.name,
           application_id: application,
           command })
@@ -212,6 +215,27 @@ export default class AppService {
       return {
         next: result.next,
         items
+      }
+    } catch (e) {
+      throw new Error(e)
+    }
+  }
+
+  /**
+   * get report information
+   * @param {string} id
+   * @public
+   * @async
+   * @return {Promise<IReportItem>}
+   */
+  public async getReportInformation (uuid: string): Promise<any> {
+    try {
+      let results = await ReportsModel.findOne({ uuid })
+      let { client_ip, start_time, end_time, succeeded, views,
+        downloads, result, application, command } = results
+      return {
+        client_ip, application, result, downloads, views,
+        succeeded, end_time, start_time, command
       }
     } catch (e) {
       throw new Error(e)
