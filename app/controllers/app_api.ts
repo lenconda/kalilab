@@ -42,7 +42,7 @@ export default class APIController {
   async getAllApplications (
     @QueryParam('limit') limit: number = 10,
     @QueryParam('page') page: number = 1,
-    @QueryParam('category') category: string): Promise<{next: boolean, items: IApplication[]}> {
+    @QueryParam('category') category: string): Promise<{next: boolean, items: any[]}> {
     let result = await this.service.getAllApplications(limit, page, category)
     return result
   }

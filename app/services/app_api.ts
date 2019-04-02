@@ -138,17 +138,16 @@ export default class AppService {
   public async getAllApplications (
     limit: number,
     page: number,
-    category?: string): Promise<{ next: boolean, items: IApplicationItem[] }> {
+    category?: string): Promise<{ next: boolean, items: any[] }> {
     let query = category ? { category } : {}
     try {
       let result = await this.pagination(AdminManageModel, query, limit, page)
       return {
         next: result.next,
         items: result.items.map((value, index) => {
-          let { _id, binaryPath, name, avatar, version, updated, category, brief } = value
+          let { _id, name, avatar, version, updated, category, brief } = value
           return {
-            id: _id,
-            binaryPath, updated, version, avatar, name, category, brief }
+            id: _id, updated, version, avatar, name, category, brief }
         })
       }
     } catch (e) {
