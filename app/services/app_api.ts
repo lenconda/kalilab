@@ -180,40 +180,36 @@ export default class AppService {
     }
   }
 
+  /**
+   *
+   * @param {number} limit
+   * @param {number} page
+   * @param {string} application
+   * @public
+   * @async
+   * @return {Promise<{next: boolean, items: any[]}>}
+   */
   public async getAllReports (
     limit: number,
     page: number,
-    application?: string): Promise<{next: boolean, items: IReportItem[]}> {
+    application?: string): Promise<{next: boolean, items: any[]}> {
     try {
       let condition = application ? { application } : {}
       let result = await this.pagination(ReportsModel, condition, limit, page)
+      let items = []
+      for (let item of result.items) {
+        let {
+          _id, result, succeeded, end_time, views, downloads, application, command } = item
+        let appInformation = await this.getApplicationInformation(application)
+        items.push({
+          id: _id, result, succeeded, end_time, views, downloads,
+          application_name: appInformation.name,
+          application_id: application,
+          command })
+      }
       return {
         next: result.next,
-        items: result.items.map((value, index) => {
-          let {
-            _id,
-            start_time,
-            result,
-            succeeded,
-            end_time,
-            views,
-            downloads,
-            application,
-            client_ip,
-            command } = value
-          return {
-            id: _id,
-            start_time,
-            result,
-            succeeded,
-            end_time,
-            views,
-            downloads,
-            application,
-            client_ip,
-            command
-          }
-        })
+        items
       }
     } catch (e) {
       throw new Error(e)
