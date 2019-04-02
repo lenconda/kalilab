@@ -232,7 +232,7 @@ export default class AppService {
     id: string): Promise<IGetReportDetailItem> {
     try {
       let results = await ReportsModel.findById(id)
-      let { client_ip, start_time, end_time, succeeded, views,
+      let { start_time, end_time, succeeded, views,
         downloads, result, application, command } = results
       let appInformation = await this.getApplicationInformation(application)
       return {
