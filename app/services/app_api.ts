@@ -148,9 +148,9 @@ export default class AppService {
       return {
         next: result.next,
         items: result.items.map((value, index) => {
-          let { _id, name, avatar, version, updated, category, brief } = value
+          let { _id, binaryPath, name, avatar, version, updated, category, brief } = value
           return {
-            id: _id, updated, version, avatar, name, category, brief }
+            id: _id, binaryPath, updated, version, avatar, name, category, brief }
         })
       }
     } catch (e) {
