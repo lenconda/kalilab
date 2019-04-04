@@ -5,10 +5,8 @@ import {
 import {
   IApplicationRequest,
   IApplication,
-  IApplicationItem,
   IApplicationUpdateRequest } from '../../interfaces/admin_manage'
 import {
-  ICategory,
   ICategoryResponse } from '../../interfaces/category'
 
 @Service()
@@ -29,27 +27,6 @@ export default class AdminManageService {
       let result = await AdminManageModel.insertMany(<IApplication[]>[{
         binaryPath, avatar, name, version, updated, brief, category}])
       return `Added application ${result[0].name}`
-    } catch (e) {
-      throw new Error(e)
-    }
-  }
-
-  /**
-   * get all application lists
-   * @public
-   * @async
-   * @return {Promise<IApplication[]>}
-   */
-  public async getAllApplications (): Promise<IApplicationItem[]> {
-    try {
-      let resultsRaw = await AdminManageModel.find({})
-      let results = resultsRaw.map((value, index): IApplicationItem => {
-        let { _id, binaryPath, name, avatar, version, updated, category, brief } = value
-        return {
-          id: _id,
-          binaryPath, updated, version, avatar, name, category, brief }
-      })
-      return results
     } catch (e) {
       throw new Error(e)
     }
@@ -88,27 +65,6 @@ export default class AdminManageService {
     try {
       await AdminManageModel.findByIdAndDelete(id)
       return `Deleted application ${id}`
-    } catch (e) {
-      throw new Error(e)
-    }
-  }
-
-  /**
-   * get all categories
-   * @public
-   * @async
-   * @return { Promise<ICategory[]> }
-   */
-  public async getAllCategories (): Promise<ICategory[]> {
-    try {
-      let resultRaw = await CategoryModel.find({})
-      let result = resultRaw.map((value, index) => {
-        return {
-          id: value._id,
-          name: value.name
-        }
-      })
-      return result
     } catch (e) {
       throw new Error(e)
     }

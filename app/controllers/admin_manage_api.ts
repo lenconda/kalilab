@@ -1,6 +1,5 @@
 import {
   JsonController,
-  Get,
   Post,
   BodyParam,
   Authorized,
@@ -9,9 +8,7 @@ import {
   Delete
 } from 'routing-controllers'
 import AdminManageService from '../services/admin_manage_api'
-import {
-  IApplication,
-  IApplicationUpdateRequest } from '../../interfaces/admin_manage'
+import { IApplicationUpdateRequest } from '../../interfaces/admin_manage'
 import { Inject } from 'typedi'
 
 @JsonController('/admin/manage')
@@ -35,13 +32,6 @@ export default class AdminManageController {
     return result
   }
 
-  @Get('/application')
-  @Authorized()
-  async getAllApplications (): Promise<IApplication[]> {
-    let results = await this.service.getAllApplications()
-    return results
-  }
-
   @Put('/application/:id')
   @Authorized()
   async modifyApplicationInformation (
@@ -59,14 +49,7 @@ export default class AdminManageController {
     return result
   }
 
-  @Get('/categories')
-  @Authorized()
-  async getCategories () {
-    let result = await this.service.getAllCategories()
-    return result
-  }
-
-  @Post('/categories')
+  @Post('/category')
   @Authorized()
   async createCategory (
     @BodyParam('name') name: string): Promise<string> {
