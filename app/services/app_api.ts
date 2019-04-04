@@ -170,15 +170,28 @@ export default class AppService {
     limit: number,
     page: number): Promise<{next: boolean, items: ICategoryResponse[]}> {
     try {
-      let result = await this.pagination(CategoryModel, {}, limit, page)
-      return {
-        next: result.next,
-        items: result.items.map((value, index) => {
-          return {
-            id: value._id,
-            name: value.name
-          }
-        })
+      if (limit === -1) {
+        let result = await CategoryModel.find({})
+        return {
+          next: false,
+          items: result.map((value, index) => {
+            return {
+              id: value._id,
+              name: value.name
+            }
+          })
+        }
+      } else {
+        let result = await this.pagination(CategoryModel, {}, limit, page)
+        return {
+          next: result.next,
+          items: result.items.map((value, index) => {
+            return {
+              id: value._id,
+              name: value.name
+            }
+          })
+        }
       }
     } catch (e) {
       throw new Error(e)
