@@ -1,6 +1,9 @@
 import { Service } from 'typedi'
 import jwt from 'jsonwebtoken'
 import md5 from 'md5'
+import {
+  BadRequestError,
+  ForbiddenError } from 'routing-controllers'
 import { AdminUserModel } from '../database/models'
 
 export interface IAdminLoginResult {
@@ -35,15 +38,15 @@ export default class AdminUserService {
    * @async
    * @return {Promise<IAdminLoginResult>}
    */
-  public async adminLogin (username: string, password: string): Promise<IAdminLoginResult> {
+  public async adminLogin (username: string, password: string): Promise<string> {
     let results = await AdminUserModel.findOne({ username, password: md5(password) })
     if (results) {
       let payload = {
         id: results._id.toString()
       }
-      return { ok: true, token: jwt.sign(payload, 'kalilabs', { expiresIn: '1day' }) }
+      return jwt.sign(payload, 'kalilabs', { expiresIn: '1day' })
     } else {
-      return { ok: false, token: null }
+      throw new ForbiddenError('Login failed')
     }
   }
 
@@ -74,7 +77,7 @@ export default class AdminUserService {
   public async updateUserProfile (
     userID: string,
     oldPassword: string,
-    newProfile: INewUserProfile): Promise<IUpdateProfileResult> {
+    newProfile: INewUserProfile): Promise<{message: string}> {
     let { password } = await AdminUserModel.findOne({ _id: userID })
     if (md5(oldPassword) === password) {
       try {
@@ -84,17 +87,13 @@ export default class AdminUserService {
         }
         await AdminUserModel.updateOne({ _id: userID }, profile)
         return {
-          ok: true,
           message: `Updated profile for ${userID}`
         }
       } catch (e) {
-        return { ok: false, message: e.toString() }
+        return e.toString()
       }
     } else {
-      return {
-        ok: false,
-        message: 'Old password does not match'
-      }
+      throw new BadRequestError('Old password does not match')
     }
   }
 

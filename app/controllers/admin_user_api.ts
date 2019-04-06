@@ -7,9 +7,7 @@ import {
   CurrentUser,
   BodyParam } from 'routing-controllers'
 import AdminUserService, {
-  IAdminLoginResult,
-  IUserProfile,
-  IUpdateProfileResult } from '../services/admin_user_api'
+  IUserProfile } from '../services/admin_user_api'
 import { Inject } from 'typedi'
 
 @JsonController('/admin/user')
@@ -21,7 +19,7 @@ export default class AdminUserController {
   @Post('/login')
   async login (
     @BodyParam('username') username: string,
-    @BodyParam('password') password: string): Promise<IAdminLoginResult> {
+    @BodyParam('password') password: string): Promise<string> {
     const result = await this.service.adminLogin(username, password)
     return result
   }
@@ -39,7 +37,7 @@ export default class AdminUserController {
     @CurrentUser() userID: string,
     @BodyParam('oldPassword') oldPassword: string,
     @BodyParam('username') username: string,
-    @BodyParam('password') password: string): Promise<IUpdateProfileResult> {
+    @BodyParam('password') password: string): Promise<{message: string}> {
     const result = await this.service.updateUserProfile(userID, oldPassword, {
       username, password
     })

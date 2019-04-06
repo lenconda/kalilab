@@ -25,7 +25,7 @@ export default class AdminManageController {
     @BodyParam('avatar') avatar: string,
     @BodyParam('version') version: string,
     @BodyParam('brief') brief: string,
-    @BodyParam('category') category: string[]): Promise<string> {
+    @BodyParam('category') category: string[]): Promise<{message: string}> {
     let result = this.service.addApplication({
       binaryPath, name, version, avatar, brief, category
     })
@@ -36,7 +36,7 @@ export default class AdminManageController {
   @Authorized()
   async modifyApplicationInformation (
     @Param('id') id: string,
-    @BodyParam('updates') updates: IApplicationUpdateRequest ): Promise<string> {
+    @BodyParam('updates') updates: IApplicationUpdateRequest ): Promise<{message: string}> {
     let result = await this.service.modifyApplicationInformation(updates, id)
     return result
   }
@@ -44,7 +44,7 @@ export default class AdminManageController {
   @Delete('/application/:id')
   @Authorized()
   async deleteApplication (
-    @Param('id') id: string): Promise<string> {
+    @Param('id') id: string): Promise<{message: string}> {
     let result = await this.service.deleteApplication(id)
     return result
   }
@@ -52,7 +52,7 @@ export default class AdminManageController {
   @Post('/category')
   @Authorized()
   async createCategory (
-    @BodyParam('name') name: string): Promise<string> {
+    @BodyParam('name') name: string): Promise<{message: string}> {
     let result = await this.service.createCategory(name)
     return result
   }
@@ -61,7 +61,7 @@ export default class AdminManageController {
   @Authorized()
   async updateCategory (
     @Param('id') id: string,
-    @BodyParam('name') name: string): Promise<string> {
+    @BodyParam('name') name: string): Promise<{message: string}> {
     let result = await this.service.updateCategory(id, name)
     return result
   }

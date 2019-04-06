@@ -20,13 +20,15 @@ export default class AdminManageService {
    * @return {Promise<string>}
    */
   public async addApplication (
-    applicationInformation: IApplicationRequest): Promise<string> {
+    applicationInformation: IApplicationRequest): Promise<{message: string}> {
     let { binaryPath, avatar, name, version, brief, category } = applicationInformation
     let updated = Date.parse(new Date().toString()).toString()
     try {
       let result = await AdminManageModel.insertMany(<IApplication[]>[{
         binaryPath, avatar, name, version, updated, brief, category}])
-      return `Added application ${result[0].name}`
+      return {
+        message: `Added application ${result[0].name}`
+      }
     } catch (e) {
       throw new Error(e)
     }
@@ -42,13 +44,15 @@ export default class AdminManageService {
    */
   public async modifyApplicationInformation (
     updatedInformation: IApplicationUpdateRequest,
-    id: string): Promise<string> {
+    id: string): Promise<{message: string}> {
     try {
       await AdminManageModel.findByIdAndUpdate(id, {
         ...updatedInformation,
         updated: Date.parse(new Date().toString()).toString()
       })
-      return `Updated application ${id}`
+      return {
+        message: `Updated application ${id}`
+      }
     } catch (e) {
       throw new Error(e)
     }
@@ -61,10 +65,12 @@ export default class AdminManageService {
    * @async
    * @return {Promise<string>}
    */
-  public async deleteApplication (id: string): Promise<string> {
+  public async deleteApplication (id: string): Promise<{message: string}> {
     try {
       await AdminManageModel.findByIdAndDelete(id)
-      return `Deleted application ${id}`
+      return {
+        message: `Deleted application ${id}`
+      }
     } catch (e) {
       throw new Error(e)
     }
@@ -78,12 +84,14 @@ export default class AdminManageService {
    * @return {Promise<string>}
    */
   public async createCategory (
-    name: string): Promise<string> {
+    name: string): Promise<{message: string}> {
     try {
       await CategoryModel.insertMany(<ICategoryResponse[]>[{
         name
       }])
-      return `Added a new category '${name}'`
+      return {
+        message: `Added a new category '${name}'`
+      }
     } catch (e) {
       throw new Error(e)
     }
@@ -99,10 +107,12 @@ export default class AdminManageService {
    */
   public async updateCategory (
     id: string,
-    name: string): Promise<string> {
+    name: string): Promise<{message: string}> {
     try {
       await CategoryModel.findByIdAndUpdate(id, { name })
-      return `Updated category ${name}(${id})`
+      return {
+        message: `Updated category ${name}(${id})`
+      }
     } catch (e) {
       throw new Error(e)
     }
