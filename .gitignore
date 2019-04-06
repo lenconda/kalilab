@@ -62,3 +62,5 @@ jspm_packages/
 test.js
 test.ts
 
+.app
+.DS_Store
