@@ -5,13 +5,15 @@ import { KoaMiddlewareInterface, Middleware } from 'routing-controllers'
 export class ResponseHandler implements KoaMiddlewareInterface {
 
   async use (ctx: IRouterContext, next: (err?: any) => Promise<any>) {
-    ctx.body = {
-      message: 'OK',
-      status: 200,
-      data: !!ctx.body ? ctx.body : {}
+    if (!(/download/g.test(ctx.req.url))) {
+      ctx.body = {
+        message: 'OK',
+        status: 200,
+        data: !!ctx.body ? ctx.body : {}
+      }
+      ctx.status = 200
+      next()
     }
-    ctx.status = 200
-    next()
   }
 
 }

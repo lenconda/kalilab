@@ -1,5 +1,6 @@
 import { Service } from 'typedi'
 import { exec } from 'child_process'
+import { createHtml, IHTMLParams } from '../utils/create_pdf'
 import {
   IReportItem,
   IReportItemResponse,
@@ -14,6 +15,7 @@ import {
   ReportsModel,
   AdminManageModel,
   CategoryModel } from '../database/models'
+import { Context } from 'koa'
 
 @Service()
 export default class AppService {
@@ -247,15 +249,49 @@ export default class AppService {
       let results = await ReportsModel.findById(id)
       let { start_time, end_time, succeeded, views,
         downloads, result, application, command } = results
+      let currentViews = views + 1
       let appInformation = await this.getApplicationInformation(application)
+      await ReportsModel.findByIdAndUpdate(id, { views: currentViews })
       return {
         application_name: appInformation.name,
         application_id: application,
-        result, downloads, views, succeeded, end_time, start_time, command
+        result, downloads, views: currentViews, succeeded, end_time, start_time, command
       }
     } catch (e) {
       throw new Error(e)
     }
+  }
+
+  /**
+   * generate pdf document
+   * @param {Context} context
+   * @param {string} id
+   * @public
+   * @async
+   * @return {Promise<Buffer>}
+   */
+  public async downloadReport (context: Context, id: string): Promise<Buffer> {
+    let report = await ReportsModel.findById(id)
+    let {
+      application,
+      start_time,
+      command,
+      succeeded, result } = report
+    let { name, version } = await AdminManageModel.findById(application)
+    let params: IHTMLParams = {
+      app_name: name,
+      report_id: id,
+      app_id: application,
+      app_version: version,
+      start_time,
+      download_time: Date.parse(new Date().toString()).toString(),
+      command,
+      ok: succeeded,
+      result
+    }
+    let buffer = await createHtml(params)
+    context.set('Content-Type', 'application/pdf')
+    return buffer
   }
 
 }

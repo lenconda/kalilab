@@ -74,4 +74,12 @@ export default class APIController {
     return result
   }
 
+  @Get('report/:id/download')
+  async downloadReport (
+    @Ctx() ctx: Context,
+    @Param('id') id: string): Promise<Buffer> {
+    let result = await this.service.downloadReport(ctx, id)
+    return result
+  }
+
 }
