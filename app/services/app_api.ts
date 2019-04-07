@@ -36,7 +36,7 @@ export default class AppService {
       setTimeout(() => {
         child.kill('SIGINT')
         reject('Timed out')
-      }, 1000 * 60 * 5)
+      }, 1000 * 60 * 60 * 24)
     })
   }
 
