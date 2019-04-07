@@ -146,14 +146,26 @@ export default class AppService {
     category?: string): Promise<{ next: boolean, items: IApplicationSummary[] }> {
     let query = category ? { category } : {}
     try {
-      let result = await this.pagination(AdminManageModel, query, limit, page)
-      return {
-        next: result.next,
-        items: result.items.map((value, index) => {
-          let { _id, binaryPath, name, avatar, version, updated, category, brief } = value
-          return {
-            id: _id, binaryPath, updated, version, avatar, name, category, brief }
-        })
+      if (limit === -1) {
+        let result = await AdminManageModel.find({})
+        return {
+          next: false,
+          items: result.map((value, index) => {
+            let { _id, binaryPath, name, avatar, version, updated, category, brief } = value
+            return {
+              id: _id, binaryPath, updated, version, avatar, name, category, brief }
+          })
+        }
+      } else {
+        let result = await this.pagination(AdminManageModel, query, limit, page)
+        return {
+          next: result.next,
+          items: result.items.map((value, index) => {
+            let { _id, binaryPath, name, avatar, version, updated, category, brief } = value
+            return {
+              id: _id, binaryPath, updated, version, avatar, name, category, brief }
+          })
+        }
       }
     } catch (e) {
       throw new Error(e)
