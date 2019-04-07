@@ -3,7 +3,6 @@ import { exec } from 'child_process'
 import uuidv4 from 'uuid/v4'
 import { createHtml, IHTMLParams } from '../utils/create_pdf'
 import {
-  IReportItem,
   IReportItemResponse,
   IGetReportItem,
   IGetReportDetailItem } from '../../interfaces/reports'
@@ -95,7 +94,7 @@ export default class AppService {
         succeeded: true,
         result: execResult
       }
-      let report = await ReportsModel.insertMany(<IReportItem[]>[{
+      let report = await ReportsModel.insertMany(<any[]>[{
         ...response, views: 0, downloads: 0 }])
       return { id: report[0]._id,  ...response }
     } catch (e) {
@@ -105,7 +104,7 @@ export default class AppService {
         succeeded: false,
         result: e.toString()
       }
-      await ReportsModel.insertMany(<IReportItem[]>[{
+      await ReportsModel.insertMany(<any[]>[{
         ...response, views: 0, downloads: 0 }])
       return response
     }

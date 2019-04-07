@@ -12,9 +12,15 @@ export interface IReportItemResponse extends IReportBase {
   application: string
 }
 
-export interface IReportMongoItem extends IReportItemResponse {
+export interface IReportResponseWithoutID {
   result: string
   client_ip: string
+  application: string
+}
+
+export interface IReportMongoItem extends IReportBase {
+  result: string
+  application: string
   views: number
   downloads: number
 }
@@ -33,8 +39,4 @@ export interface IGetReportDetailItem extends IReportBase {
   application_id: string
   views: number
   downloads: number
-}
-
-export interface IReportItem extends IReportMongoItem {
-  id?: string
 }
