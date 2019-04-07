@@ -1,5 +1,6 @@
 import { Service } from 'typedi'
 import { exec } from 'child_process'
+import uuidv4 from 'uuid/v4'
 import { createHtml, IHTMLParams } from '../utils/create_pdf'
 import {
   IReportItem,
@@ -302,7 +303,7 @@ export default class AppService {
       result
     }
     let buffer = await createHtml(params)
-    let filename = `report_${id}.pdf`
+    let filename = `report_${id}_${uuidv4()}.pdf`
     context.set('Content-Type', 'application/pdf')
     context.set('Content-Disposition', `attachment; filename="${filename}"`)
     return buffer
