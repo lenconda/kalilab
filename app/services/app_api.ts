@@ -95,9 +95,9 @@ export default class AppService {
         succeeded: true,
         result: execResult
       }
-      await ReportsModel.insertMany(<IReportItem[]>[{
+      let report = await ReportsModel.insertMany(<IReportItem[]>[{
         ...response, views: 0, downloads: 0 }])
-      return response
+      return { id: report[0]._id,  ...response }
     } catch (e) {
       let response: IReportItemResponse = {
         ...responseBasic,
@@ -306,6 +306,7 @@ export default class AppService {
     let filename = `report_${id}_${uuidv4()}.pdf`
     context.set('Content-Type', 'application/pdf')
     context.set('Content-Disposition', `attachment; filename="${filename}"`)
+    await ReportsModel.findByIdAndUpdate(id, { downloads: report.downloads + 1 })
     return buffer
   }
 

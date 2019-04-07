@@ -6,6 +6,7 @@ interface IReportBase {
 }
 
 export interface IReportItemResponse extends IReportBase {
+  id?: string
   result: string
   client_ip: string
   application: string
@@ -34,4 +35,6 @@ export interface IGetReportDetailItem extends IReportBase {
   downloads: number
 }
 
-export interface IReportItem extends IReportMongoItem {}
+export interface IReportItem extends IReportMongoItem {
+  id?: string
+}
