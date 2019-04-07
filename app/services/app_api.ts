@@ -147,7 +147,7 @@ export default class AppService {
     let query = category ? { category } : {}
     try {
       if (limit === -1) {
-        let result = await AdminManageModel.find({})
+        let result = await AdminManageModel.find(query)
         return {
           next: false,
           items: result.map((value, index) => {
