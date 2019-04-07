@@ -29,10 +29,14 @@ export default class AppService {
    */
   private async execAsync (command: string): Promise<string> {
     return new Promise<string>((resolve, reject) => {
-      exec(command, (err, stdout, stderror) => {
+      let child = exec(command, (err, stdout, stderror) => {
         if (err) reject(err.message)
         else resolve(stdout)
       })
+      setTimeout(() => {
+        child.kill('SIGINT')
+        reject('Timed out')
+      }, 1000 * 60 * 5)
     })
   }
 
