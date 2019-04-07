@@ -290,7 +290,9 @@ export default class AppService {
       result
     }
     let buffer = await createHtml(params)
+    let filename = `report_${id}.pdf`
     context.set('Content-Type', 'application/pdf')
+    context.set('Content-Disposition', `attachment; filename="${filename}"`)
     return buffer
   }
 

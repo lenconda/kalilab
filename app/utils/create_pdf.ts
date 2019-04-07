@@ -37,11 +37,9 @@ export async function createHtml (params: IHTMLParams): Promise<Buffer> {
       <meta charset="utf-8">
       <title>Report-${report_id}</title>
       <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-      <link href="https://cdn.bootcss.com/font-awesome/5.8.1/css/all.min.css" rel="stylesheet">
-      <link rel="stylesheet" href="http://static.lenconda.top/css/github.css">
       <style>
         body {
+          font-family: monospace;
           box-sizing: border-box;
           padding: 30px;
         }
@@ -52,14 +50,15 @@ export async function createHtml (params: IHTMLParams): Promise<Buffer> {
       <article class="markdown-body">
         <h2>Basic Information</h2>
         <ul>
-          <li><b>Report ID: </b>${report_id}</li>
-          <li><b>Download Time: (UNIX Timestamp): </b>${download_time}</li>
-          <li><b>Execute Time (UNIX Timestamp): </b>${start_time}</li>
-          <li><b>Execute Time (Locale String): </b>${new Date(parseInt(start_time)).toString()}</li>
-          <li><b>Application Name: </b>${app_name}</li>
-          <li><b>Application ID: </b>${app_id}</li>
-          <li><b>Application Version: </b>${app_version}</li>
-          <li><b>Succeeded: </b>${ok}</li>
+          <li><h3>Report ID: </h3><pre>${report_id}</pre></li>
+          <li><h3>Download Time (UNIX Timestamp): </h3><pre>${download_time}</pre></li>
+          <li><h3>Download Time (Locale String): </h3><pre>${new Date(parseInt(download_time)).toString()}</pre></li>
+          <li><h3>Execute Time (UNIX Timestamp): </h3><pre>${start_time}</pre></li>
+          <li><h3>Execute Time (Locale String): </h3><pre>${new Date(parseInt(start_time)).toString()}</pre></li>
+          <li><h3>Application Name: </h3><pre>${app_name}</pre></li>
+          <li><h3>Application ID: </h3><pre>${app_id}</pre></li>
+          <li><h3>Application Version: </h3><pre>${app_version}</pre></li>
+          <li><h3>Succeeded: </h3><pre>${ok}</pre></li>
         </ul>
         <h2>Command(s)</h2>
         <code>
