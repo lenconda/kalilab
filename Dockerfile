@@ -14,6 +14,6 @@ RUN chmod 777 /app
 COPY . .
 
 RUN npm i pm2 -g
+RUN npm i
 
-RUN chmod +x ./entrypoint.sh
-ENTRYPOINT ["./entrypoint.sh"]
+CMD ["pm2-docker", "start", "--interpreter", "/app/node_modules/.bin/ts-node", "./app/app.ts"]
