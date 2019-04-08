@@ -4,9 +4,8 @@ RUN apt update && apt install openssl ca-certificates xz-utils -y
 RUN wget https://nodejs.org/dist/v10.15.3/node-v10.15.3-linux-x64.tar.xz \
   && xz -d node-v10.15.3-linux-x64.tar.xz \
   && tar -xvf node-v10.15.3-linux-x64.tar \
-  && mv node-v10.15.3-linux-x64 /opt/node \
-  && echo 'export PATH=/opt/node/bin:$PATH' >> /etc/bashrc \
-  && . /etc/bashrc
+  && mv node-v10.15.3-linux-x64 /opt/node
+ENV PATH /opt/node/bin:$PATH
 
 EXPOSE 3000
 
