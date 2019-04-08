@@ -10,6 +10,11 @@ export interface IMongoConfig {
   DB_NAME: string
 }
 
-export interface IConfig extends IAppConfig, IMongoConfig {
+export interface IRedisConfig {
+  REDIS_HOST: string
+  REDIS_PORT: number
+}
+
+export interface IConfig extends IAppConfig, IMongoConfig, IRedisConfig {
   relativeFilePath: (filePath: string) => string
 }

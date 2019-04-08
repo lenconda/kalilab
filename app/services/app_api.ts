@@ -1,5 +1,8 @@
 import { Service } from 'typedi'
 import { exec } from 'child_process'
+import config from '../../config'
+import redis from 'redis'
+import ps from 'ps-node'
 import uuidv4 from 'uuid/v4'
 import { createHtml, IHTMLParams } from '../utils/create_pdf'
 import {
@@ -16,9 +19,36 @@ import {
   AdminManageModel,
   CategoryModel } from '../database/models'
 import { Context } from 'koa'
+const { REDIS_HOST, REDIS_PORT } = config
 
 @Service()
 export default class AppService {
+
+  constructor () {
+    this.redisConn = redis.createClient({
+      host: REDIS_HOST,
+      port: REDIS_PORT
+    })
+  }
+
+  private redisConn
+
+  private redisSetKey (key: string, value: any) {
+    this.redisConn.set(key, value)
+    this.redisConn.expire(key, 60 * 60 * 24)
+  }
+
+  private async redisGetValueFromKey (key: string): Promise<string> {
+    return new Promise<string>((resolve, reject) => {
+      this.redisConn.get(key, (err, reply) => {
+        if (err) reject(err)
+        else {
+          if (reply) resolve(reply)
+          else reject('Expired')
+        }
+      })
+    })
+  }
 
   /**
    * exec a command with Promise
@@ -27,12 +57,13 @@ export default class AppService {
    * @async
    * @return {Promise<string>}
    */
-  private async execAsync (command: string): Promise<string> {
+  private async execAsync (command: string, uuid: string): Promise<string> {
     return new Promise<string>((resolve, reject) => {
       let child = exec(command, (err, stdout, stderror) => {
         if (err) reject(err.message)
         else resolve(stdout)
       })
+      this.redisSetKey(uuid, child.pid)
       setTimeout(() => {
         child.kill('SIGINT')
         reject('Timed out')
@@ -68,6 +99,27 @@ export default class AppService {
   }
 
   /**
+   * kill a process with a specified pid
+   * @param {string} uuid
+   * @public
+   * @async
+   * @return {Promise<string>}
+   */
+  public async killCurrentProcess (uuid: string): Promise<string> {
+    return new Promise<string>(async (resolve, reject) => {
+      try {
+        let pid = await this.redisGetValueFromKey(uuid)
+        ps.kill(pid, err => {
+          if (err) reject(err)
+          else resolve(`Killed process with pid ${pid}`)
+        })
+      } catch (e) {
+        reject(e)
+      }
+    })
+  }
+
+  /**
    * run application and get results
    * @param {string} application
    * @param {string} ip
@@ -79,7 +131,8 @@ export default class AppService {
   public async runApplication (
     application: string,
     ip: string,
-    command: string): Promise<IReportItemResponse> {
+    command: string,
+    uuid: string): Promise<IReportItemResponse> {
     let findApplication =
       await AdminManageModel.findById(application)
     let bin = findApplication.binaryPath
@@ -91,7 +144,7 @@ export default class AppService {
       client_ip: ip,
       application }
     try {
-      let execResult = await this.execAsync(fullCommand)
+      let execResult = await this.execAsync(fullCommand, uuid)
       let response: IReportItemResponse = {
         ...responseBasic,
         end_time: Date.parse(new Date().toString()).toString(),

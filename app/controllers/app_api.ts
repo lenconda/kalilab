@@ -24,13 +24,26 @@ export default class APIController {
   @Inject()
   service: AppService
 
+  @Post('kill/:uuid')
+  async killCurrentProcess (
+    @Param('uuid') uuid: string
+  ) {
+    try {
+      let result = this.service.killCurrentProcess(uuid)
+      return result
+    } catch (e) {
+      throw new Error(e)
+    }
+  }
+
   @Post('application/:id')
   async runApplication (
     @Ctx() context: Context,
     @Param('id') application: string,
-    @BodyParam('command') command: string): Promise<IReportItemResponse> {
+    @BodyParam('command') command: string,
+    @BodyParam('uuid') uuid: string): Promise<IReportItemResponse> {
     let result =
-      await this.service.runApplication(application, context.ip, command)
+      await this.service.runApplication(application, context.ip, command, uuid)
     return result
   }
 

@@ -3,6 +3,7 @@ import path from 'path'
 
 import APP from './app'
 import MONGODB from './mongodb'
+import REDIS from './redis'
 
 const relativeFilePath = (filePath: string): string =>
   path.relative(process.cwd(), filePath)
@@ -10,6 +11,7 @@ const relativeFilePath = (filePath: string): string =>
 const config: IConfig = {
   ...APP,
   ...MONGODB,
+  ...REDIS,
   relativeFilePath
 }
 
