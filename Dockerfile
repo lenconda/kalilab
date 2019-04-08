@@ -6,7 +6,7 @@ RUN wget https://nodejs.org/dist/v10.15.3/node-v10.15.3-linux-x64.tar.xz \
   && tar -xvf node-v10.15.3-linux-x64.tar \
   && mv node-v10.15.3-linux-x64 /opt/node \
   && echo 'export PATH=/opt/node/bin:$PATH' >> /etc/bashrc \
-  && source /etc/bashrc
+  && . /etc/bashrc
 
 EXPOSE 3000
 
