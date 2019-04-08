@@ -24,9 +24,9 @@ export default class APIController {
   @Inject()
   service: AppService
 
-  @Post('kill/:uuid')
+  @Post('kill')
   async killCurrentProcess (
-    @Param('uuid') uuid: string
+    @BodyParam('uuid') uuid: string
   ) {
     try {
       let result = this.service.killCurrentProcess(uuid)
