@@ -1,11 +1,12 @@
 FROM kalilinux/kali-linux-docker
 
-RUN apt update && apt install openssl ca-certificates xz-utils -y
-RUN wget https://nodejs.org/dist/v10.15.3/node-v10.15.3-linux-x64.tar.xz \
-  && xz -d node-v10.15.3-linux-x64.tar.xz \
-  && tar -xvf node-v10.15.3-linux-x64.tar \
-  && mv node-v10.15.3-linux-x64 /opt/node
-ENV PATH /opt/node/bin:$PATH
+RUN sudo apt-key adv --recv-keys --keyserver keyserver.ubuntu.com ED444FF07D8D0BF6 && \
+  apt update && \
+  apt install openssl ca-certificates xz-utils \
+  ace-voip amap apt2 automater braa cisco-torch dmitry dnsenum dnsmap dnsrecon dnstracer \
+  dnswalk enum4linux fierce goofile  hping3 ident-user-enum masscan nmap parsero sslstrip \
+  sslyze theharvester unicornscan bed doona oscanner sqlmap blindelephant davtest fimap \
+  grabber hurl joomscan ua-tester whatweb wpscan -y
 
 EXPOSE 3000
 
