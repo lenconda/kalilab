@@ -14,6 +14,8 @@ services:
       - redis
     volumes:
       - ./.kalilabs:/app/.app
+    ports:
+      - 3000:3000
     environment:
       NODE_ENV: production
       DB_USER: kalilabs
