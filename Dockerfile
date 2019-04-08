@@ -1,6 +1,6 @@
 FROM kalilinux/kali-linux-docker
 
-RUN apt install gnupg && \
+RUN apt install -y gnupg && \
   apt-key adv --recv-keys --keyserver keyserver.ubuntu.com ED444FF07D8D0BF6 && \
   apt update && \
   apt install openssl ca-certificates xz-utils \
