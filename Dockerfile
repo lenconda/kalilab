@@ -10,6 +10,7 @@ ENV PATH /opt/node/bin:$PATH
 EXPOSE 3000
 
 WORKDIR /app
+RUN chmod 777 /app
 COPY . .
 
 RUN npm i pm2 -g
