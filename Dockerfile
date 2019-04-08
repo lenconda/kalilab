@@ -1,6 +1,6 @@
 FROM kalilinux/kali-linux-docker
 
-RUN sudo apt-key adv --recv-keys --keyserver keyserver.ubuntu.com ED444FF07D8D0BF6 && \
+RUN apt-key adv --recv-keys --keyserver keyserver.ubuntu.com ED444FF07D8D0BF6 && \
   apt update && \
   apt install openssl ca-certificates xz-utils \
   ace-voip amap apt2 automater braa cisco-torch dmitry dnsenum dnsmap dnsrecon dnstracer \
