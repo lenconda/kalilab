@@ -22,5 +22,7 @@ RUN npm i
 
 ENV OPENSSL_CONF=/etc/ssl
 
+RUN npm run init
+
 RUN chmod +x ./entrypoint.sh
 ENTRYPOINT ["./entrypoint.sh"]
