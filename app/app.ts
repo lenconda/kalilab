@@ -1,5 +1,6 @@
 import 'reflect-metadata'
 import Koa from 'koa'
+import kcors from 'kcors'
 import bodyParser from 'koa-bodyparser'
 import log4koa from 'koa-log4'
 import getLogger from './utils/logger'
@@ -21,6 +22,8 @@ app.use(async(ctx, next): Promise<any> => {
     }
   }
 })
+
+app.use(kcors())
 
 app.use(bodyParser())
 
