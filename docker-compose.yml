@@ -18,7 +18,7 @@ services:
       - 3000:3000
     environment:
       NODE_ENV: production
-      DB_HOST: '157.230.14.98'
+      DB_HOST: '10.136.159.26'
       DB_USER: kalilabs
       DB_PASSWORD: ekmfyyU
       REDIS_HOST: redis
