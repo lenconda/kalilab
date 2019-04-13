@@ -2,4 +2,4 @@ language: node_js
 node_js:
   - "10.0"
 script:
-  - curl http://157.230.14.98:8080/kalilabs/build
+  - curl -H "Access-Key: dd5b8b305dc711e9a5c45d702c736b17" http://157.230.14.98:5000/hooks/e66321d5-e3ce-4b86-8b42-4122020265c3
