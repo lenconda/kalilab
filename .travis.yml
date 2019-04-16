@@ -2,4 +2,4 @@ language: node_js
 node_js:
   - "10.0"
 script:
-  - curl http://157.230.14.98:5000/hooks/e66321d5-e3ce-4b86-8b42-4122020265c3
+  - curl -H "Access-Key:0c7eabb05fdd11e993fef3b616d5112a" http://157.230.14.98:5000/hooks/39ed2aba-406b-4720-95e1-3e022c96710c
